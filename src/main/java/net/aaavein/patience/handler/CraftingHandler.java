@@ -114,7 +114,6 @@ public final class CraftingHandler {
                 .orElse(DISABLED);
     }
 
-
     public boolean handleSlotClick(Object screen, int slotId, boolean shiftHeld) {
         setScreen(screen);
         ContainerSettings container = getCurrentContainerSettings();
@@ -244,7 +243,8 @@ public final class CraftingHandler {
         }
 
         if (currentTime < totalTime) {
-            currentTime += SpeedCalculator.getCraftingSpeed(getPlayerLevel());
+            float speed = SpeedCalculator.getCraftingSpeed(getPlayerLevel());
+            currentTime += speed * config.getExperienceMultiplier();
         } else {
             completeCraft(container);
         }
@@ -279,7 +279,6 @@ public final class CraftingHandler {
         }
     }
 
-
     private float calculateCraftTime(ContainerSettings container) {
         float globalMult = config.getGlobalTimeMultiplier();
         float containerMult = container.getTimeMultiplier();
@@ -310,7 +309,6 @@ public final class CraftingHandler {
 
         return BASE_CRAFT_TIME * ingredientTime * outputMult * containerMult * globalMult;
     }
-
 
     private String getEffectiveCraftingSound(ContainerSettings container) {
         String sound = container.getCraftingSound();
@@ -379,7 +377,6 @@ public final class CraftingHandler {
         }
     }
 
-
     @OnlyIn(Dist.CLIENT)
     private boolean hasPlayer() {
         return Minecraft.getInstance().player != null;
@@ -441,7 +438,6 @@ public final class CraftingHandler {
             int cost = menu.getCost();
 
             if (cost <= 0) return false;
-
             if (!player.getAbilities().instabuild && player.experienceLevel < cost) {
                 return false;
             }
@@ -449,7 +445,6 @@ public final class CraftingHandler {
 
         return true;
     }
-
 
     private boolean isSlotEmpty(int slot) {
         if (currentScreen == null) return true;

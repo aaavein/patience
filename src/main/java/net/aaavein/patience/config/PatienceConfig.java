@@ -21,6 +21,9 @@ public class PatienceConfig {
     @SerializedName("global_time_multiplier")
     private float globalTimeMultiplier;
 
+    @SerializedName("experience_multiplier")
+    private float experienceMultiplier;
+
     @SerializedName("containers")
     private List<ContainerSettings> containers;
 
@@ -35,9 +38,9 @@ public class PatienceConfig {
         this.defaultCraftingSound = "patience:crafting";
         this.defaultFinishSound = "patience:finish";
         this.globalTimeMultiplier = 1.0F;
+        this.experienceMultiplier = 1.0F;
     }
 
-    // getters
     public boolean isDebug() {
         return debug;
     }
@@ -58,6 +61,10 @@ public class PatienceConfig {
         return globalTimeMultiplier;
     }
 
+    public float getExperienceMultiplier() {
+        return experienceMultiplier;
+    }
+
     public List<ContainerSettings> getContainers() {
         return containers;
     }
@@ -70,7 +77,6 @@ public class PatienceConfig {
         return outputMultipliers;
     }
 
-    // setters
     public void setDebug(boolean debug) {
         this.debug = debug;
     }
@@ -91,6 +97,10 @@ public class PatienceConfig {
         this.globalTimeMultiplier = globalTimeMultiplier;
     }
 
+    public void setExperienceMultiplier(float experienceMultiplier) {
+        this.experienceMultiplier = experienceMultiplier;
+    }
+
     public void setContainers(List<ContainerSettings> containers) {
         this.containers = containers;
     }
@@ -106,9 +116,10 @@ public class PatienceConfig {
     @Override
     public String toString() {
         return "PatienceConfig{" +
-                "debug=" +debug  +
+                "debug=" + debug +
                 ", enable_sounds=" + enableSounds +
                 ", global_time_multiplier=" + globalTimeMultiplier +
+                ", experience_multiplier=" + experienceMultiplier +
                 '}';
     }
 
@@ -141,6 +152,11 @@ public class PatienceConfig {
 
         public Builder globalTimeMultiplier(float multiplier) {
             config.setGlobalTimeMultiplier(multiplier);
+            return this;
+        }
+
+        public Builder experienceMultiplier(float multiplier) {
+            config.setExperienceMultiplier(multiplier);
             return this;
         }
 
