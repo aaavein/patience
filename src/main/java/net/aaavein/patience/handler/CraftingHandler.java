@@ -24,6 +24,7 @@ import net.aaavein.patience.config.ConfigManager;
 import net.aaavein.patience.config.ContainerSettings;
 import net.aaavein.patience.config.PatienceConfig;
 import net.aaavein.patience.network.CraftingExhaustionPayload;
+import net.aaavein.patience.registry.AttributeRegistry;
 import net.aaavein.patience.util.SlotRange;
 import net.aaavein.patience.util.SpeedCalculator;
 
@@ -284,7 +285,14 @@ public final class CraftingHandler {
         }
 
         if (currentTime < totalTime) {
+            double attributeValue = 1.0;
+            LocalPlayer player = Minecraft.getInstance().player;
+            if (player != null) {
+                attributeValue = player.getAttributeValue(AttributeRegistry.CRAFTING_SPEED);
+            }
+
             float speed = SpeedCalculator.getCraftingSpeed(
+                    attributeValue,
                     getPlayerLevel(),
                     config.getBaseCraftingSpeed(),
                     config.getSpeedPerLevel(),
