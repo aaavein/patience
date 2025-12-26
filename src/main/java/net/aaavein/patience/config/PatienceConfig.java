@@ -59,6 +59,18 @@ public class PatienceConfig {
     @SerializedName("hunger_penalty_multiplier")
     private float hungerPenaltyMultiplier;
 
+    @SerializedName("enable_minigame")
+    private boolean enableMinigame;
+
+    @SerializedName("minigame_chance")
+    private float minigameChance;
+
+    @SerializedName("minigame_window_width")
+    private float minigameWindowWidth;
+
+    @SerializedName("minigame_penalty_percent")
+    private float minigamePenaltyPercent;
+
     @SerializedName("item_sounds")
     private Map<String, String> itemSounds;
 
@@ -88,6 +100,10 @@ public class PatienceConfig {
         this.enableHungerPenalty = true;
         this.hungerThreshold = 6;
         this.hungerPenaltyMultiplier = 0.5F;
+        this.enableMinigame = true;
+        this.minigameChance = 0.5F;
+        this.minigameWindowWidth = 0.15F;
+        this.minigamePenaltyPercent = 0.25F;
         this.itemSounds = new HashMap<>();
     }
 
@@ -157,6 +173,22 @@ public class PatienceConfig {
 
     public float getHungerPenaltyMultiplier() {
         return hungerPenaltyMultiplier;
+    }
+
+    public boolean isMinigameEnabled() {
+        return enableMinigame;
+    }
+
+    public float getMinigameChance() {
+        return minigameChance;
+    }
+
+    public float getMinigameWindowWidth() {
+        return minigameWindowWidth;
+    }
+
+    public float getMinigamePenaltyPercent() {
+        return minigamePenaltyPercent;
     }
 
     public Map<String, String> getItemSounds() {
@@ -243,6 +275,22 @@ public class PatienceConfig {
         this.hungerPenaltyMultiplier = hungerPenaltyMultiplier;
     }
 
+    public void setEnableMinigame(boolean enableMinigame) {
+        this.enableMinigame = enableMinigame;
+    }
+
+    public void setMinigameChance(float minigameChance) {
+        this.minigameChance = minigameChance;
+    }
+
+    public void setMinigameWindowWidth(float minigameWindowWidth) {
+        this.minigameWindowWidth = minigameWindowWidth;
+    }
+
+    public void setMinigamePenaltyPercent(float minigamePenaltyPercent) {
+        this.minigamePenaltyPercent = minigamePenaltyPercent;
+    }
+
     public void setItemSounds(Map<String, String> itemSounds) {
         this.itemSounds = itemSounds;
     }
@@ -271,6 +319,7 @@ public class PatienceConfig {
                 ", enable_decay=" + enableDecay +
                 ", enable_shake=" + enableScreenShake +
                 ", enable_hunger_penalty=" + enableHungerPenalty +
+                ", enable_minigame=" + enableMinigame +
                 ", item_sounds=" + (itemSounds != null ? itemSounds.size() : 0) +
                 '}';
     }
@@ -364,6 +413,26 @@ public class PatienceConfig {
 
         public Builder hungerPenaltyMultiplier(float multiplier) {
             config.setHungerPenaltyMultiplier(multiplier);
+            return this;
+        }
+
+        public Builder enableMinigame(boolean enable) {
+            config.setEnableMinigame(enable);
+            return this;
+        }
+
+        public Builder minigameChance(float chance) {
+            config.setMinigameChance(chance);
+            return this;
+        }
+
+        public Builder minigameWindowWidth(float width) {
+            config.setMinigameWindowWidth(width);
+            return this;
+        }
+
+        public Builder minigamePenaltyPercent(float percent) {
+            config.setMinigamePenaltyPercent(percent);
             return this;
         }
 

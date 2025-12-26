@@ -8,6 +8,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.Item;
@@ -39,6 +40,7 @@ public final class CraftingHandler {
     private static final double MOVEMENT_THRESHOLD = 0.01;
     private static final double VELOCITY_THRESHOLD = 0.01;
     private static final int SOUND_PITCH_INTERVAL = 25;
+    private static final RandomSource RANDOM = RandomSource.create();
     private static final ContainerSettings DISABLED = ContainerSettings.builder().enabled(false).build();
 
     private static CraftingHandler instance;
@@ -61,6 +63,12 @@ public final class CraftingHandler {
     private String currentSoundId;
     private int soundTicks;
     private float currentShake;
+
+    private boolean miniGameActive;
+    private float miniGameStart;
+    private float miniGameEnd;
+    private int resultTimer;
+    private int resultState;
 
     private CraftingHandler() {}
 
@@ -112,6 +120,14 @@ public final class CraftingHandler {
         stopCrafting();
     }
 
+    public int getResultState() {
+        return resultState;
+    }
+
+    public boolean isMiniGameActive() {
+        return miniGameActive;
+    }
+
     public ContainerSettings getCurrentContainerSettings() {
         if (currentScreen == null || config == null) {
             return DISABLED;
@@ -150,6 +166,11 @@ public final class CraftingHandler {
             return true;
         }
 
+        if (crafting && miniGameActive && resultState == 0) {
+            checkMiniGame();
+            return true;
+        }
+
         if (isPlayerMoving()) {
             logDebug("Player moving, blocking craft");
             return true;
@@ -181,6 +202,54 @@ public final class CraftingHandler {
         return container.isEnabled() && slotId == container.getOutputSlot();
     }
 
+    public float[] getOverlayColor() {
+        if (resultState == 1) {
+            return new float[]{0.0F, 1.0F, 0.0F, 1.0F};
+        } else if (resultState == 2) {
+            return new float[]{1.0F, 0.0F, 0.0F, 1.0F};
+        } else if (miniGameActive) {
+            float progress = currentTime / totalTime;
+            if (progress >= miniGameStart && progress <= miniGameEnd) {
+                return new float[]{1.0F, 1.0F, 0.0F, 1.0F};
+            }
+        }
+        return new float[]{1.0F, 1.0F, 1.0F, 1.0F};
+    }
+
+    private void checkMiniGame() {
+        float progress = currentTime / totalTime;
+        if (progress >= miniGameStart && progress <= miniGameEnd) {
+            resultState = 1;
+            resultTimer = 20;
+            currentTime = totalTime;
+        } else {
+            resultState = 2;
+            resultTimer = 20;
+            currentTime = Math.max(0, currentTime - (totalTime * config.getMinigamePenaltyPercent()));
+        }
+    }
+
+    private void setupMiniGame() {
+        this.miniGameActive = false;
+        this.resultState = 0;
+        this.resultTimer = 0;
+
+        if (config.isMinigameEnabled() && RANDOM.nextFloat() < config.getMinigameChance()) {
+            this.miniGameActive = true;
+            float width = config.getMinigameWindowWidth();
+            float safeMaxStart = Math.max(0.2F, 0.9F - width);
+            float range = safeMaxStart - 0.2F;
+
+            if (range <= 0) {
+                this.miniGameStart = 0.2F;
+            } else {
+                this.miniGameStart = 0.2F + RANDOM.nextFloat() * range;
+            }
+
+            this.miniGameEnd = this.miniGameStart + width;
+        }
+    }
+
     private void startCrafting(ContainerSettings container, boolean continuous) {
         this.currentContainer = container;
         this.continuous = continuous;
@@ -192,6 +261,8 @@ public final class CraftingHandler {
         }
 
         this.totalTime = newTotalTime;
+
+        setupMiniGame();
 
         recordPosition();
 
@@ -205,6 +276,8 @@ public final class CraftingHandler {
         this.continuous = false;
         this.currentContainer = null;
         this.currentShake = 0;
+        this.miniGameActive = false;
+        this.resultState = 0;
 
         if (!config.isDecayEnabled()) {
             this.currentTime = 0;
@@ -226,6 +299,13 @@ public final class CraftingHandler {
         if (currentShake > 0) {
             currentShake -= 0.02F;
             if (currentShake < 0) currentShake = 0;
+        }
+
+        if (resultTimer > 0) {
+            resultTimer--;
+            if (resultTimer == 0) {
+                resultState = 0;
+            }
         }
 
         ContainerSettings container = getCurrentContainerSettings();
@@ -350,6 +430,9 @@ public final class CraftingHandler {
             } else {
                 waitTicks = 0;
                 currentTime = 0;
+
+                setupMiniGame();
+
                 if (totalTime >= 10.0F && config.isSoundsEnabled()) {
                     playCraftingSound(getEffectiveCraftingSound(container));
                 }

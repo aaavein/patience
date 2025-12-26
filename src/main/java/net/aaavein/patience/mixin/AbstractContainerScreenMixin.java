@@ -1,5 +1,6 @@
 package net.aaavein.patience.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -83,12 +84,14 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
             CraftingHandler handler = CraftingHandler.getInstance();
             ContainerSettings settings = handler.getCurrentContainerSettings();
 
-            if (!settings.isEnabled() || !handler.isCrafting()) {
+            if (!settings.isEnabled()) {
                 return;
             }
 
-            if (settings.isShowOverlay() && handler.getTotalTime() > 0) {
-                patience$renderOverlay(graphics, settings, handler.getCurrentTime() / handler.getTotalTime());
+            if (handler.isCrafting() || handler.getCurrentTime() > 0) {
+                if (settings.isShowOverlay() && handler.getTotalTime() > 0) {
+                    patience$renderOverlay(graphics, settings, handler.getCurrentTime() / handler.getTotalTime());
+                }
             }
         } catch (Exception e) {
             patience$LOGGER.error("Error rendering overlay", e);
@@ -105,6 +108,9 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
 
         String direction = settings.getOverlayDirection();
         if (direction == null) direction = "right";
+
+        float[] colors = CraftingHandler.getInstance().getOverlayColor();
+        RenderSystem.setShaderColor(colors[0], colors[1], colors[2], colors[3]);
 
         switch (direction.toLowerCase()) {
             case "left" -> {
@@ -126,6 +132,8 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
                 graphics.blit(texture, x, y, 0, 0, w, height, width, height);
             }
         }
+
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     @Inject(method = "onClose", at = @At("TAIL"))
