@@ -93,8 +93,6 @@ public final class CraftingHandler {
         return totalTime;
     }
 
-    // screen management
-
     public void setScreen(Object screen) {
         this.currentScreen = (AbstractContainerScreen<?>) screen;
     }
@@ -124,6 +122,10 @@ public final class CraftingHandler {
         if (config != null && config.isDebug()) {
             LOGGER.info("Slot click: slot={}, screen={}, shift={}",
                     slotId, currentScreen.getClass().getName(), shiftHeld);
+        }
+
+        if (isCreative()) {
+            return false;
         }
 
         if (!container.isEnabled()) {
@@ -160,6 +162,11 @@ public final class CraftingHandler {
         if (config == null) {
             return false;
         }
+
+        if (isCreative()) {
+            return false;
+        }
+
         setScreen(screen);
         ContainerSettings container = getCurrentContainerSettings();
         return container.isEnabled() && slotId == container.getOutputSlot();
@@ -189,6 +196,11 @@ public final class CraftingHandler {
 
     public void tick() {
         if (!hasPlayer() || config == null) {
+            return;
+        }
+
+        if (isCreative()) {
+            if (crafting) stopCrafting();
             return;
         }
 
@@ -380,6 +392,12 @@ public final class CraftingHandler {
     }
 
     @OnlyIn(Dist.CLIENT)
+    private boolean isCreative() {
+        LocalPlayer player = Minecraft.getInstance().player;
+        return player != null && player.getAbilities().instabuild;
+    }
+
+    @OnlyIn(Dist.CLIENT)
     private void recordPosition() {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
@@ -423,6 +441,7 @@ public final class CraftingHandler {
             int cost = menu.getCost();
 
             if (cost <= 0) return false;
+
             if (!player.getAbilities().instabuild && player.experienceLevel < cost) {
                 return false;
             }
