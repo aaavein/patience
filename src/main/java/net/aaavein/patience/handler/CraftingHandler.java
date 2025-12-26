@@ -311,7 +311,15 @@ public final class CraftingHandler {
                     config.getSpeedPerLevel(),
                     config.getMaxLevelCap()
             );
-            currentTime += speed * config.getExperienceMultiplier();
+
+            float hungerMult = 1.0F;
+            if (config.isHungerPenaltyEnabled() && player != null) {
+                if (player.getFoodData().getFoodLevel() <= config.getHungerThreshold()) {
+                    hungerMult = config.getHungerPenaltyMultiplier();
+                }
+            }
+
+            currentTime += speed * config.getExperienceMultiplier() * hungerMult;
         } else {
             completeCraft(container);
         }

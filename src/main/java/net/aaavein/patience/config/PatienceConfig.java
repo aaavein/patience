@@ -50,6 +50,15 @@ public class PatienceConfig {
     @SerializedName("screen_shake_intensity")
     private float screenShakeIntensity;
 
+    @SerializedName("enable_hunger_penalty")
+    private boolean enableHungerPenalty;
+
+    @SerializedName("hunger_threshold")
+    private int hungerThreshold;
+
+    @SerializedName("hunger_penalty_multiplier")
+    private float hungerPenaltyMultiplier;
+
     @SerializedName("item_sounds")
     private Map<String, String> itemSounds;
 
@@ -76,6 +85,9 @@ public class PatienceConfig {
         this.decayRate = 2.0F;
         this.enableScreenShake = true;
         this.screenShakeIntensity = 0.5F;
+        this.enableHungerPenalty = true;
+        this.hungerThreshold = 6;
+        this.hungerPenaltyMultiplier = 0.5F;
         this.itemSounds = new HashMap<>();
     }
 
@@ -133,6 +145,18 @@ public class PatienceConfig {
 
     public float getScreenShakeIntensity() {
         return screenShakeIntensity;
+    }
+
+    public boolean isHungerPenaltyEnabled() {
+        return enableHungerPenalty;
+    }
+
+    public int getHungerThreshold() {
+        return hungerThreshold;
+    }
+
+    public float getHungerPenaltyMultiplier() {
+        return hungerPenaltyMultiplier;
     }
 
     public Map<String, String> getItemSounds() {
@@ -207,6 +231,18 @@ public class PatienceConfig {
         this.screenShakeIntensity = screenShakeIntensity;
     }
 
+    public void setEnableHungerPenalty(boolean enableHungerPenalty) {
+        this.enableHungerPenalty = enableHungerPenalty;
+    }
+
+    public void setHungerThreshold(int hungerThreshold) {
+        this.hungerThreshold = hungerThreshold;
+    }
+
+    public void setHungerPenaltyMultiplier(float hungerPenaltyMultiplier) {
+        this.hungerPenaltyMultiplier = hungerPenaltyMultiplier;
+    }
+
     public void setItemSounds(Map<String, String> itemSounds) {
         this.itemSounds = itemSounds;
     }
@@ -234,6 +270,7 @@ public class PatienceConfig {
                 ", exhaustion_cost=" + exhaustionCost +
                 ", enable_decay=" + enableDecay +
                 ", enable_shake=" + enableScreenShake +
+                ", enable_hunger_penalty=" + enableHungerPenalty +
                 ", item_sounds=" + (itemSounds != null ? itemSounds.size() : 0) +
                 '}';
     }
@@ -312,6 +349,21 @@ public class PatienceConfig {
 
         public Builder screenShakeIntensity(float intensity) {
             config.setScreenShakeIntensity(intensity);
+            return this;
+        }
+
+        public Builder enableHungerPenalty(boolean enable) {
+            config.setEnableHungerPenalty(enable);
+            return this;
+        }
+
+        public Builder hungerThreshold(int threshold) {
+            config.setHungerThreshold(threshold);
+            return this;
+        }
+
+        public Builder hungerPenaltyMultiplier(float multiplier) {
+            config.setHungerPenaltyMultiplier(multiplier);
             return this;
         }
 
