@@ -69,32 +69,19 @@ public final class ConfigManager {
 
         List<ContainerSettings> defaultContainers = DefaultContainers.getAll();
 
-        PatienceConfig config = PatienceConfig.builder()
-                .debug(false)
-                .enableSounds(true)
-                .defaultCraftingSound("patience:crafting")
-                .defaultFinishSound("patience:finish")
-                .globalTimeMultiplier(1.0F)
-                .experienceMultiplier(1.0F)
-                .baseCraftingSpeed(1.0F)
-                .speedPerLevel(0.02F)
-                .maxLevelCap(200)
-                .exhaustionCost(0.1F)
-                .enableDecay(false)
-                .decayRate(2.0F)
-                .itemSounds(new HashMap<>())
-                .containers(defaultContainers)
-                .ingredientMultipliers(ItemSettings.builder()
-                        .byMod(new HashMap<>())
-                        .byItem(new HashMap<>())
-                        .byTag(new HashMap<>())
-                        .build())
-                .outputMultipliers(ItemSettings.builder()
-                        .byMod(new HashMap<>())
-                        .byItem(new HashMap<>())
-                        .byTag(new HashMap<>())
-                        .build())
-                .build();
+        PatienceConfig config = new PatienceConfig();
+        config.setContainers(defaultContainers);
+
+        config.setIngredientMultipliers(ItemSettings.builder()
+                .byMod(new HashMap<>())
+                .byItem(new HashMap<>())
+                .byTag(new HashMap<>())
+                .build());
+        config.setOutputMultipliers(ItemSettings.builder()
+                .byMod(new HashMap<>())
+                .byItem(new HashMap<>())
+                .byTag(new HashMap<>())
+                .build());
 
         config.getIngredientMultipliers().getByMod().put("minecraft", 1.0F);
         config.getIngredientMultipliers().getByItem().put("minecraft:stick", 1.0F);

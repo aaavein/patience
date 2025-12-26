@@ -225,7 +225,7 @@ public final class CraftingHandler {
         } else {
             resultState = 2;
             resultTimer = 20;
-            currentTime = Math.max(0, currentTime - (totalTime * config.getMinigamePenaltyPercent()));
+            currentTime = Math.max(0, currentTime - (totalTime * config.getMinigame().getPenaltyPercent()));
         }
     }
 
@@ -234,9 +234,9 @@ public final class CraftingHandler {
         this.resultState = 0;
         this.resultTimer = 0;
 
-        if (config.isMinigameEnabled() && RANDOM.nextFloat() < config.getMinigameChance()) {
+        if (config.getMinigame().isEnabled() && RANDOM.nextFloat() < config.getMinigame().getChance()) {
             this.miniGameActive = true;
-            float width = config.getMinigameWindowWidth();
+            float width = config.getMinigame().getWindowWidth();
             float safeMaxStart = Math.max(0.2F, 0.9F - width);
             float range = safeMaxStart - 0.2F;
 
@@ -256,7 +256,7 @@ public final class CraftingHandler {
         this.crafting = true;
 
         float newTotalTime = calculateCraftTime(container);
-        if (!config.isDecayEnabled() || currentTime > newTotalTime) {
+        if (!config.getDecay().isEnabled() || currentTime > newTotalTime) {
             this.currentTime = 0;
         }
 
@@ -279,7 +279,7 @@ public final class CraftingHandler {
         this.miniGameActive = false;
         this.resultState = 0;
 
-        if (!config.isDecayEnabled()) {
+        if (!config.getDecay().isEnabled()) {
             this.currentTime = 0;
         }
 
@@ -311,7 +311,7 @@ public final class CraftingHandler {
         ContainerSettings container = getCurrentContainerSettings();
 
         if (!container.isEnabled()) {
-            if (config.isDecayEnabled() && currentTime > 0) {
+            if (config.getDecay().isEnabled() && currentTime > 0) {
                 decayProgress();
             } else {
                 currentTime = 0;
@@ -322,13 +322,13 @@ public final class CraftingHandler {
         if (crafting) {
             tickSound();
             tickCrafting(container);
-        } else if (config.isDecayEnabled() && currentTime > 0) {
+        } else if (config.getDecay().isEnabled() && currentTime > 0) {
             decayProgress();
         }
     }
 
     private void decayProgress() {
-        currentTime -= config.getDecayRate();
+        currentTime -= config.getDecay().getRate();
         currentShake = 0;
         if (currentTime <= 0) {
             currentTime = 0;
@@ -337,7 +337,7 @@ public final class CraftingHandler {
     }
 
     private void tickCrafting(ContainerSettings container) {
-        if (config.isDecayEnabled()) {
+        if (config.getDecay().isEnabled()) {
             if (isPlayerMoving()) {
                 decayProgress();
                 stopSound();
@@ -388,27 +388,27 @@ public final class CraftingHandler {
             float speed = SpeedCalculator.getCraftingSpeed(
                     attributeValue,
                     getPlayerLevel(),
-                    config.getBaseCraftingSpeed(),
-                    config.getSpeedPerLevel(),
-                    config.getMaxLevelCap()
+                    config.getExperience().getBaseSpeed(),
+                    config.getExperience().getSpeedPerLevel(),
+                    config.getExperience().getMaxLevelCap()
             );
 
             float hungerMult = 1.0F;
-            if (config.isHungerPenaltyEnabled() && player != null) {
-                if (player.getFoodData().getFoodLevel() <= config.getHungerThreshold()) {
-                    hungerMult = config.getHungerPenaltyMultiplier();
+            if (config.getHunger().isPenaltyEnabled() && player != null) {
+                if (player.getFoodData().getFoodLevel() <= config.getHunger().getThreshold()) {
+                    hungerMult = config.getHunger().getPenaltyMultiplier();
                 }
             }
 
-            currentTime += speed * config.getExperienceMultiplier() * hungerMult;
+            currentTime += speed * config.getExperience().getMultiplier() * hungerMult;
         } else {
             completeCraft(container);
         }
     }
 
     private void completeCraft(ContainerSettings container) {
-        if (config.getExhaustionCost() > 0) {
-            PacketDistributor.sendToServer(new CraftingExhaustionPayload(config.getExhaustionCost()));
+        if (config.getHunger().getExhaustionCost() > 0) {
+            PacketDistributor.sendToServer(new CraftingExhaustionPayload(config.getHunger().getExhaustionCost()));
         }
 
         if (config.isSoundsEnabled()) {
@@ -539,8 +539,8 @@ public final class CraftingHandler {
     private void playSound(String soundId) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
-            if (config.isScreenShakeEnabled()) {
-                currentShake = config.getScreenShakeIntensity();
+            if (config.getScreenShake().isEnabled()) {
+                currentShake = config.getScreenShake().getIntensity();
             }
 
             player.swing(InteractionHand.MAIN_HAND);

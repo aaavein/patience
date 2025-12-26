@@ -23,53 +23,20 @@ public class PatienceConfig {
     @SerializedName("global_time_multiplier")
     private float globalTimeMultiplier;
 
-    @SerializedName("experience_multiplier")
-    private float experienceMultiplier;
+    @SerializedName("experience")
+    private ExperienceSettings experience;
 
-    @SerializedName("base_crafting_speed")
-    private float baseCraftingSpeed;
+    @SerializedName("decay")
+    private DecaySettings decay;
 
-    @SerializedName("speed_per_level")
-    private float speedPerLevel;
+    @SerializedName("screen_shake")
+    private ScreenShakeSettings screenShake;
 
-    @SerializedName("max_level_cap")
-    private int maxLevelCap;
+    @SerializedName("hunger")
+    private HungerSettings hunger;
 
-    @SerializedName("exhaustion_cost")
-    private float exhaustionCost;
-
-    @SerializedName("enable_decay")
-    private boolean enableDecay;
-
-    @SerializedName("decay_rate")
-    private float decayRate;
-
-    @SerializedName("enable_screen_shake")
-    private boolean enableScreenShake;
-
-    @SerializedName("screen_shake_intensity")
-    private float screenShakeIntensity;
-
-    @SerializedName("enable_hunger_penalty")
-    private boolean enableHungerPenalty;
-
-    @SerializedName("hunger_threshold")
-    private int hungerThreshold;
-
-    @SerializedName("hunger_penalty_multiplier")
-    private float hungerPenaltyMultiplier;
-
-    @SerializedName("enable_minigame")
-    private boolean enableMinigame;
-
-    @SerializedName("minigame_chance")
-    private float minigameChance;
-
-    @SerializedName("minigame_window_width")
-    private float minigameWindowWidth;
-
-    @SerializedName("minigame_penalty_percent")
-    private float minigamePenaltyPercent;
+    @SerializedName("minigame")
+    private MinigameSettings minigame;
 
     @SerializedName("item_sounds")
     private Map<String, String> itemSounds;
@@ -84,380 +51,166 @@ public class PatienceConfig {
     private ItemSettings outputMultipliers;
 
     public PatienceConfig() {
+        this.debug = false;
         this.enableSounds = true;
         this.defaultCraftingSound = "patience:crafting";
         this.defaultFinishSound = "patience:finish";
         this.globalTimeMultiplier = 1.0F;
-        this.experienceMultiplier = 1.0F;
-        this.baseCraftingSpeed = 1.0F;
-        this.speedPerLevel = 0.02F;
-        this.maxLevelCap = 200;
-        this.exhaustionCost = 0.1F;
-        this.enableDecay = true;
-        this.decayRate = 2.0F;
-        this.enableScreenShake = true;
-        this.screenShakeIntensity = 0.5F;
-        this.enableHungerPenalty = true;
-        this.hungerThreshold = 6;
-        this.hungerPenaltyMultiplier = 0.5F;
-        this.enableMinigame = true;
-        this.minigameChance = 0.5F;
-        this.minigameWindowWidth = 0.15F;
-        this.minigamePenaltyPercent = 0.25F;
+
+        this.experience = new ExperienceSettings();
+        this.decay = new DecaySettings();
+        this.screenShake = new ScreenShakeSettings();
+        this.hunger = new HungerSettings();
+        this.minigame = new MinigameSettings();
+
         this.itemSounds = new HashMap<>();
     }
 
-    public boolean isDebug() {
-        return debug;
+    public static class ExperienceSettings {
+        @SerializedName("multiplier")
+        private float multiplier = 1.0F;
+        @SerializedName("base_speed")
+        private float baseSpeed = 1.0F;
+        @SerializedName("speed_per_level")
+        private float speedPerLevel = 0.02F;
+        @SerializedName("max_level_cap")
+        private int maxLevelCap = 200;
+
+        public float getMultiplier() { return multiplier; }
+        public float getBaseSpeed() { return baseSpeed; }
+        public float getSpeedPerLevel() { return speedPerLevel; }
+        public int getMaxLevelCap() { return maxLevelCap; }
+
+        public void setMultiplier(float val) { this.multiplier = val; }
+        public void setBaseSpeed(float val) { this.baseSpeed = val; }
+        public void setSpeedPerLevel(float val) { this.speedPerLevel = val; }
+        public void setMaxLevelCap(int val) { this.maxLevelCap = val; }
     }
 
-    public boolean isSoundsEnabled() {
-        return enableSounds;
+    public static class DecaySettings {
+        @SerializedName("enabled")
+        private boolean enabled = true;
+        @SerializedName("rate")
+        private float rate = 2.0F;
+
+        public boolean isEnabled() { return enabled; }
+        public float getRate() { return rate; }
+
+        public void setEnabled(boolean val) { this.enabled = val; }
+        public void setRate(float val) { this.rate = val; }
     }
 
-    public String getDefaultCraftingSound() {
-        return defaultCraftingSound;
+    public static class ScreenShakeSettings {
+        @SerializedName("enabled")
+        private boolean enabled = true;
+        @SerializedName("intensity")
+        private float intensity = 0.5F;
+
+        public boolean isEnabled() { return enabled; }
+        public float getIntensity() { return intensity; }
+
+        public void setEnabled(boolean val) { this.enabled = val; }
+        public void setIntensity(float val) { this.intensity = val; }
     }
 
-    public String getDefaultFinishSound() {
-        return defaultFinishSound;
+    public static class HungerSettings {
+        @SerializedName("exhaustion_cost")
+        private float exhaustionCost = 0.1F;
+        @SerializedName("penalty_enabled")
+        private boolean penaltyEnabled = true;
+        @SerializedName("threshold")
+        private int threshold = 6;
+        @SerializedName("penalty_multiplier")
+        private float penaltyMultiplier = 0.5F;
+
+        public float getExhaustionCost() { return exhaustionCost; }
+        public boolean isPenaltyEnabled() { return penaltyEnabled; }
+        public int getThreshold() { return threshold; }
+        public float getPenaltyMultiplier() { return penaltyMultiplier; }
+
+        public void setExhaustionCost(float val) { this.exhaustionCost = val; }
+        public void setPenaltyEnabled(boolean val) { this.penaltyEnabled = val; }
+        public void setThreshold(int val) { this.threshold = val; }
+        public void setPenaltyMultiplier(float val) { this.penaltyMultiplier = val; }
     }
 
-    public float getGlobalTimeMultiplier() {
-        return globalTimeMultiplier;
+    public static class MinigameSettings {
+        @SerializedName("enabled")
+        private boolean enabled = true;
+        @SerializedName("chance")
+        private float chance = 0.5F;
+        @SerializedName("window_width")
+        private float windowWidth = 0.15F;
+        @SerializedName("penalty_percent")
+        private float penaltyPercent = 0.25F;
+
+        public boolean isEnabled() { return enabled; }
+        public float getChance() { return chance; }
+        public float getWindowWidth() { return windowWidth; }
+        public float getPenaltyPercent() { return penaltyPercent; }
+
+        public void setEnabled(boolean val) { this.enabled = val; }
+        public void setChance(float val) { this.chance = val; }
+        public void setWindowWidth(float val) { this.windowWidth = val; }
+        public void setPenaltyPercent(float val) { this.penaltyPercent = val; }
     }
 
-    public float getExperienceMultiplier() {
-        return experienceMultiplier;
-    }
+    public boolean isDebug() { return debug; }
+    public boolean isSoundsEnabled() { return enableSounds; }
+    public String getDefaultCraftingSound() { return defaultCraftingSound; }
+    public String getDefaultFinishSound() { return defaultFinishSound; }
+    public float getGlobalTimeMultiplier() { return globalTimeMultiplier; }
 
-    public float getBaseCraftingSpeed() {
-        return baseCraftingSpeed;
-    }
+    public ExperienceSettings getExperience() { return experience; }
+    public DecaySettings getDecay() { return decay; }
+    public ScreenShakeSettings getScreenShake() { return screenShake; }
+    public HungerSettings getHunger() { return hunger; }
+    public MinigameSettings getMinigame() { return minigame; }
 
-    public float getSpeedPerLevel() {
-        return speedPerLevel;
-    }
+    public Map<String, String> getItemSounds() { return itemSounds; }
+    public List<ContainerSettings> getContainers() { return containers; }
+    public ItemSettings getIngredientMultipliers() { return ingredientMultipliers; }
+    public ItemSettings getOutputMultipliers() { return outputMultipliers; }
 
-    public int getMaxLevelCap() {
-        return maxLevelCap;
-    }
+    public void setDebug(boolean debug) { this.debug = debug; }
+    public void setEnableSounds(boolean enableSounds) { this.enableSounds = enableSounds; }
+    public void setDefaultCraftingSound(String defaultCraftingSound) { this.defaultCraftingSound = defaultCraftingSound; }
+    public void setDefaultFinishSound(String defaultFinishSound) { this.defaultFinishSound = defaultFinishSound; }
+    public void setGlobalTimeMultiplier(float globalTimeMultiplier) { this.globalTimeMultiplier = globalTimeMultiplier; }
 
-    public float getExhaustionCost() {
-        return exhaustionCost;
-    }
+    public void setExperience(ExperienceSettings experience) { this.experience = experience; }
+    public void setDecay(DecaySettings decay) { this.decay = decay; }
+    public void setScreenShake(ScreenShakeSettings screenShake) { this.screenShake = screenShake; }
+    public void setHunger(HungerSettings hunger) { this.hunger = hunger; }
+    public void setMinigame(MinigameSettings minigame) { this.minigame = minigame; }
 
-    public boolean isDecayEnabled() {
-        return enableDecay;
-    }
+    public void setItemSounds(Map<String, String> itemSounds) { this.itemSounds = itemSounds; }
+    public void setContainers(List<ContainerSettings> containers) { this.containers = containers; }
+    public void setIngredientMultipliers(ItemSettings ingredientMultipliers) { this.ingredientMultipliers = ingredientMultipliers; }
+    public void setOutputMultipliers(ItemSettings outputMultipliers) { this.outputMultipliers = outputMultipliers; }
 
-    public float getDecayRate() {
-        return decayRate;
-    }
-
-    public boolean isScreenShakeEnabled() {
-        return enableScreenShake;
-    }
-
-    public float getScreenShakeIntensity() {
-        return screenShakeIntensity;
-    }
-
-    public boolean isHungerPenaltyEnabled() {
-        return enableHungerPenalty;
-    }
-
-    public int getHungerThreshold() {
-        return hungerThreshold;
-    }
-
-    public float getHungerPenaltyMultiplier() {
-        return hungerPenaltyMultiplier;
-    }
-
-    public boolean isMinigameEnabled() {
-        return enableMinigame;
-    }
-
-    public float getMinigameChance() {
-        return minigameChance;
-    }
-
-    public float getMinigameWindowWidth() {
-        return minigameWindowWidth;
-    }
-
-    public float getMinigamePenaltyPercent() {
-        return minigamePenaltyPercent;
-    }
-
-    public Map<String, String> getItemSounds() {
-        return itemSounds;
-    }
-
-    public List<ContainerSettings> getContainers() {
-        return containers;
-    }
-
-    public ItemSettings getIngredientMultipliers() {
-        return ingredientMultipliers;
-    }
-
-    public ItemSettings getOutputMultipliers() {
-        return outputMultipliers;
-    }
-
-    public void setDebug(boolean debug) {
-        this.debug = debug;
-    }
-
-    public void setEnableSounds(boolean enableSounds) {
-        this.enableSounds = enableSounds;
-    }
-
-    public void setDefaultCraftingSound(String defaultCraftingSound) {
-        this.defaultCraftingSound = defaultCraftingSound;
-    }
-
-    public void setDefaultFinishSound(String defaultFinishSound) {
-        this.defaultFinishSound = defaultFinishSound;
-    }
-
-    public void setGlobalTimeMultiplier(float globalTimeMultiplier) {
-        this.globalTimeMultiplier = globalTimeMultiplier;
-    }
-
-    public void setExperienceMultiplier(float experienceMultiplier) {
-        this.experienceMultiplier = experienceMultiplier;
-    }
-
-    public void setBaseCraftingSpeed(float baseCraftingSpeed) {
-        this.baseCraftingSpeed = baseCraftingSpeed;
-    }
-
-    public void setSpeedPerLevel(float speedPerLevel) {
-        this.speedPerLevel = speedPerLevel;
-    }
-
-    public void setMaxLevelCap(int maxLevelCap) {
-        this.maxLevelCap = maxLevelCap;
-    }
-
-    public void setExhaustionCost(float exhaustionCost) {
-        this.exhaustionCost = exhaustionCost;
-    }
-
-    public void setEnableDecay(boolean enableDecay) {
-        this.enableDecay = enableDecay;
-    }
-
-    public void setDecayRate(float decayRate) {
-        this.decayRate = decayRate;
-    }
-
-    public void setEnableScreenShake(boolean enableScreenShake) {
-        this.enableScreenShake = enableScreenShake;
-    }
-
-    public void setScreenShakeIntensity(float screenShakeIntensity) {
-        this.screenShakeIntensity = screenShakeIntensity;
-    }
-
-    public void setEnableHungerPenalty(boolean enableHungerPenalty) {
-        this.enableHungerPenalty = enableHungerPenalty;
-    }
-
-    public void setHungerThreshold(int hungerThreshold) {
-        this.hungerThreshold = hungerThreshold;
-    }
-
-    public void setHungerPenaltyMultiplier(float hungerPenaltyMultiplier) {
-        this.hungerPenaltyMultiplier = hungerPenaltyMultiplier;
-    }
-
-    public void setEnableMinigame(boolean enableMinigame) {
-        this.enableMinigame = enableMinigame;
-    }
-
-    public void setMinigameChance(float minigameChance) {
-        this.minigameChance = minigameChance;
-    }
-
-    public void setMinigameWindowWidth(float minigameWindowWidth) {
-        this.minigameWindowWidth = minigameWindowWidth;
-    }
-
-    public void setMinigamePenaltyPercent(float minigamePenaltyPercent) {
-        this.minigamePenaltyPercent = minigamePenaltyPercent;
-    }
-
-    public void setItemSounds(Map<String, String> itemSounds) {
-        this.itemSounds = itemSounds;
-    }
-
-    public void setContainers(List<ContainerSettings> containers) {
-        this.containers = containers;
-    }
-
-    public void setIngredientMultipliers(ItemSettings ingredientMultipliers) {
-        this.ingredientMultipliers = ingredientMultipliers;
-    }
-
-    public void setOutputMultipliers(ItemSettings outputMultipliers) {
-        this.outputMultipliers = outputMultipliers;
-    }
-
-    @Override
-    public String toString() {
-        return "PatienceConfig{" +
-                "debug=" + debug +
-                ", enable_sounds=" + enableSounds +
-                ", global_time_multiplier=" + globalTimeMultiplier +
-                ", experience_multiplier=" + experienceMultiplier +
-                ", base_speed=" + baseCraftingSpeed +
-                ", exhaustion_cost=" + exhaustionCost +
-                ", enable_decay=" + enableDecay +
-                ", enable_shake=" + enableScreenShake +
-                ", enable_hunger_penalty=" + enableHungerPenalty +
-                ", enable_minigame=" + enableMinigame +
-                ", item_sounds=" + (itemSounds != null ? itemSounds.size() : 0) +
-                '}';
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
+    public static Builder builder() { return new Builder(); }
 
     public static class Builder {
         private final PatienceConfig config = new PatienceConfig();
 
-        public Builder debug(boolean debug) {
-            config.setDebug(debug);
-            return this;
-        }
+        public Builder debug(boolean val) { config.setDebug(val); return this; }
+        public Builder enableSounds(boolean val) { config.setEnableSounds(val); return this; }
+        public Builder defaultCraftingSound(String val) { config.setDefaultCraftingSound(val); return this; }
+        public Builder defaultFinishSound(String val) { config.setDefaultFinishSound(val); return this; }
+        public Builder globalTimeMultiplier(float val) { config.setGlobalTimeMultiplier(val); return this; }
 
-        public Builder enableSounds(boolean enableSounds) {
-            config.setEnableSounds(enableSounds);
-            return this;
-        }
+        public Builder experience(ExperienceSettings val) { config.setExperience(val); return this; }
+        public Builder decay(DecaySettings val) { config.setDecay(val); return this; }
+        public Builder screenShake(ScreenShakeSettings val) { config.setScreenShake(val); return this; }
+        public Builder hunger(HungerSettings val) { config.setHunger(val); return this; }
+        public Builder minigame(MinigameSettings val) { config.setMinigame(val); return this; }
 
-        public Builder defaultCraftingSound(String sound) {
-            config.setDefaultCraftingSound(sound);
-            return this;
-        }
+        public Builder itemSounds(Map<String, String> val) { config.setItemSounds(val); return this; }
+        public Builder containers(List<ContainerSettings> val) { config.setContainers(val); return this; }
+        public Builder ingredientMultipliers(ItemSettings val) { config.setIngredientMultipliers(val); return this; }
+        public Builder outputMultipliers(ItemSettings val) { config.setOutputMultipliers(val); return this; }
 
-        public Builder defaultFinishSound(String sound) {
-            config.setDefaultFinishSound(sound);
-            return this;
-        }
-
-        public Builder globalTimeMultiplier(float multiplier) {
-            config.setGlobalTimeMultiplier(multiplier);
-            return this;
-        }
-
-        public Builder experienceMultiplier(float multiplier) {
-            config.setExperienceMultiplier(multiplier);
-            return this;
-        }
-
-        public Builder baseCraftingSpeed(float speed) {
-            config.setBaseCraftingSpeed(speed);
-            return this;
-        }
-
-        public Builder speedPerLevel(float speed) {
-            config.setSpeedPerLevel(speed);
-            return this;
-        }
-
-        public Builder maxLevelCap(int level) {
-            config.setMaxLevelCap(level);
-            return this;
-        }
-
-        public Builder exhaustionCost(float cost) {
-            config.setExhaustionCost(cost);
-            return this;
-        }
-
-        public Builder enableDecay(boolean enable) {
-            config.setEnableDecay(enable);
-            return this;
-        }
-
-        public Builder decayRate(float rate) {
-            config.setDecayRate(rate);
-            return this;
-        }
-
-        public Builder enableScreenShake(boolean enable) {
-            config.setEnableScreenShake(enable);
-            return this;
-        }
-
-        public Builder screenShakeIntensity(float intensity) {
-            config.setScreenShakeIntensity(intensity);
-            return this;
-        }
-
-        public Builder enableHungerPenalty(boolean enable) {
-            config.setEnableHungerPenalty(enable);
-            return this;
-        }
-
-        public Builder hungerThreshold(int threshold) {
-            config.setHungerThreshold(threshold);
-            return this;
-        }
-
-        public Builder hungerPenaltyMultiplier(float multiplier) {
-            config.setHungerPenaltyMultiplier(multiplier);
-            return this;
-        }
-
-        public Builder enableMinigame(boolean enable) {
-            config.setEnableMinigame(enable);
-            return this;
-        }
-
-        public Builder minigameChance(float chance) {
-            config.setMinigameChance(chance);
-            return this;
-        }
-
-        public Builder minigameWindowWidth(float width) {
-            config.setMinigameWindowWidth(width);
-            return this;
-        }
-
-        public Builder minigamePenaltyPercent(float percent) {
-            config.setMinigamePenaltyPercent(percent);
-            return this;
-        }
-
-        public Builder itemSounds(Map<String, String> sounds) {
-            config.setItemSounds(sounds);
-            return this;
-        }
-
-        public Builder containers(List<ContainerSettings> containers) {
-            config.setContainers(containers);
-            return this;
-        }
-
-        public Builder ingredientMultipliers(ItemSettings multipliers) {
-            config.setIngredientMultipliers(multipliers);
-            return this;
-        }
-
-        public Builder outputMultipliers(ItemSettings multipliers) {
-            config.setOutputMultipliers(multipliers);
-            return this;
-        }
-
-        public PatienceConfig build() {
-            return config;
-        }
+        public PatienceConfig build() { return config; }
     }
 }
