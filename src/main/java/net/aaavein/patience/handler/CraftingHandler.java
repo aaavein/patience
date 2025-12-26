@@ -22,6 +22,7 @@ import net.aaavein.patience.client.sound.CraftingSoundInstance;
 import net.aaavein.patience.client.sound.SoundRegistry;
 import net.aaavein.patience.config.ConfigManager;
 import net.aaavein.patience.config.ContainerSettings;
+import net.aaavein.patience.config.ItemSettings;
 import net.aaavein.patience.config.PatienceConfig;
 import net.aaavein.patience.network.CraftingExhaustionPayload;
 import net.aaavein.patience.registry.AttributeRegistry;
@@ -345,27 +346,46 @@ public final class CraftingHandler {
         for (int slot : container.getIngredientSlots()) {
             if (isSlotEmpty(slot)) continue;
 
-            ItemInfo info = getSlotItemInfo(slot);
-            if (info == null) continue;
+            ItemStack stack = currentScreen.getMenu().getSlot(slot).getItem();
+            if (stack.isEmpty()) continue;
 
-            float modMult = config.getIngredientMultipliers().getByMod()
-                    .getOrDefault(info.modId, 1.0F);
-            float itemMult = config.getIngredientMultipliers().getByItem()
-                    .getOrDefault(info.id, 1.0F);
-            ingredientTime += modMult * itemMult;
+            ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
+            String modId = id.getNamespace();
+            String itemId = id.toString();
+
+            float modMult = config.getIngredientMultipliers().getByMod().getOrDefault(modId, 1.0F);
+            float itemMult = config.getIngredientMultipliers().getByItem().getOrDefault(itemId, 1.0F);
+            float tagMult = getTagMultiplier(stack, config.getIngredientMultipliers());
+
+            ingredientTime += modMult * itemMult * tagMult;
         }
 
-        ItemInfo outputInfo = getSlotItemInfo(container.getOutputSlot());
         float outputMult = 1.0F;
-        if (outputInfo != null) {
-            float modMult = config.getOutputMultipliers().getByMod()
-                    .getOrDefault(outputInfo.modId, 1.0F);
-            float itemMult = config.getOutputMultipliers().getByItem()
-                    .getOrDefault(outputInfo.id, 1.0F);
-            outputMult = modMult * itemMult;
+        ItemStack outputStack = currentScreen.getMenu().getSlot(container.getOutputSlot()).getItem();
+        if (!outputStack.isEmpty()) {
+            ResourceLocation id = BuiltInRegistries.ITEM.getKey(outputStack.getItem());
+            String modId = id.getNamespace();
+            String itemId = id.toString();
+
+            float modMult = config.getOutputMultipliers().getByMod().getOrDefault(modId, 1.0F);
+            float itemMult = config.getOutputMultipliers().getByItem().getOrDefault(itemId, 1.0F);
+            float tagMult = getTagMultiplier(outputStack, config.getOutputMultipliers());
+
+            outputMult = modMult * itemMult * tagMult;
         }
 
         return BASE_CRAFT_TIME * ingredientTime * outputMult * containerMult * globalMult;
+    }
+
+    private float getTagMultiplier(ItemStack stack, ItemSettings settings) {
+        float mult = 1.0F;
+        if (settings.getByTag() == null || settings.getByTag().isEmpty()) return mult;
+
+        for (var tag : stack.getTags().toList()) {
+            String key = "#" + tag.location().toString();
+            mult *= settings.getByTag().getOrDefault(key, 1.0F);
+        }
+        return mult;
     }
 
     private String getEffectiveCraftingSound(ContainerSettings container) {
@@ -553,19 +573,9 @@ public final class CraftingHandler {
         return items;
     }
 
-    private ItemInfo getSlotItemInfo(int slot) {
-        if (currentScreen == null) return null;
-
-        Item item = currentScreen.getMenu().getSlot(slot).getItem().getItem();
-        ResourceLocation loc = BuiltInRegistries.ITEM.getKey(item);
-        return new ItemInfo(loc.toString(), loc.getNamespace());
-    }
-
     private void logDebug(String message) {
         if (config != null && config.isDebug()) {
             LOGGER.info(message);
         }
     }
-
-    private record ItemInfo(String id, String modId) {}
 }
