@@ -177,8 +177,13 @@ public final class CraftingHandler {
         this.currentContainer = container;
         this.continuous = continuous;
         this.crafting = true;
-        this.currentTime = 0;
-        this.totalTime = calculateCraftTime(container);
+
+        float newTotalTime = calculateCraftTime(container);
+        if (!config.isDecayEnabled() || currentTime > newTotalTime) {
+            this.currentTime = 0;
+        }
+
+        this.totalTime = newTotalTime;
 
         recordPosition();
 
@@ -190,8 +195,12 @@ public final class CraftingHandler {
     private void stopCrafting() {
         this.crafting = false;
         this.continuous = false;
-        this.currentTime = 0;
         this.currentContainer = null;
+
+        if (!config.isDecayEnabled()) {
+            this.currentTime = 0;
+        }
+
         stopSound();
     }
 
@@ -206,21 +215,51 @@ public final class CraftingHandler {
         }
 
         ContainerSettings container = getCurrentContainerSettings();
+
         if (!container.isEnabled()) {
+            if (config.isDecayEnabled() && currentTime > 0) {
+                decayProgress();
+            } else {
+                currentTime = 0;
+            }
             return;
         }
 
         if (crafting) {
             tickSound();
             tickCrafting(container);
+        } else if (config.isDecayEnabled() && currentTime > 0) {
+            decayProgress();
+        }
+    }
+
+    private void decayProgress() {
+        currentTime -= config.getDecayRate();
+        if (currentTime <= 0) {
+            currentTime = 0;
+            stopCrafting();
         }
     }
 
     private void tickCrafting(ContainerSettings container) {
-        if (hasPlayerMoved()) {
-            logDebug("Player moved, stopping");
-            stopCrafting();
-            return;
+        if (config.isDecayEnabled()) {
+            if (isPlayerMoving()) {
+                decayProgress();
+                stopSound();
+                recordPosition();
+                return;
+            } else {
+                if (currentSound == null && config.isSoundsEnabled() && totalTime >= 10.0F) {
+                    playCraftingSound(getEffectiveCraftingSound(container));
+                }
+                recordPosition();
+            }
+        } else {
+            if (hasPlayerMoved()) {
+                logDebug("Player moved, stopping");
+                stopCrafting();
+                return;
+            }
         }
 
         if (!canAffordCraft()) {

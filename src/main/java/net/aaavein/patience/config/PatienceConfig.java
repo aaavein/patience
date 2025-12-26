@@ -36,6 +36,12 @@ public class PatienceConfig {
     @SerializedName("exhaustion_cost")
     private float exhaustionCost;
 
+    @SerializedName("enable_decay")
+    private boolean enableDecay;
+
+    @SerializedName("decay_rate")
+    private float decayRate;
+
     @SerializedName("containers")
     private List<ContainerSettings> containers;
 
@@ -55,6 +61,8 @@ public class PatienceConfig {
         this.speedPerLevel = 0.02F;
         this.maxLevelCap = 200;
         this.exhaustionCost = 0.1F;
+        this.enableDecay = true;
+        this.decayRate = 2.0F;
     }
 
     public boolean isDebug() {
@@ -95,6 +103,14 @@ public class PatienceConfig {
 
     public float getExhaustionCost() {
         return exhaustionCost;
+    }
+
+    public boolean isDecayEnabled() {
+        return enableDecay;
+    }
+
+    public float getDecayRate() {
+        return decayRate;
     }
 
     public List<ContainerSettings> getContainers() {
@@ -149,6 +165,14 @@ public class PatienceConfig {
         this.exhaustionCost = exhaustionCost;
     }
 
+    public void setEnableDecay(boolean enableDecay) {
+        this.enableDecay = enableDecay;
+    }
+
+    public void setDecayRate(float decayRate) {
+        this.decayRate = decayRate;
+    }
+
     public void setContainers(List<ContainerSettings> containers) {
         this.containers = containers;
     }
@@ -170,6 +194,7 @@ public class PatienceConfig {
                 ", experience_multiplier=" + experienceMultiplier +
                 ", base_speed=" + baseCraftingSpeed +
                 ", exhaustion_cost=" + exhaustionCost +
+                ", enable_decay=" + enableDecay +
                 '}';
     }
 
@@ -227,6 +252,16 @@ public class PatienceConfig {
 
         public Builder exhaustionCost(float cost) {
             config.setExhaustionCost(cost);
+            return this;
+        }
+
+        public Builder enableDecay(boolean enable) {
+            config.setEnableDecay(enable);
+            return this;
+        }
+
+        public Builder decayRate(float rate) {
+            config.setDecayRate(rate);
             return this;
         }
 
