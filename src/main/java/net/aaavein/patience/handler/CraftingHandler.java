@@ -14,6 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import net.aaavein.patience.api.CraftingContainer;
@@ -22,6 +23,7 @@ import net.aaavein.patience.client.sound.SoundRegistry;
 import net.aaavein.patience.config.ConfigManager;
 import net.aaavein.patience.config.ContainerSettings;
 import net.aaavein.patience.config.PatienceConfig;
+import net.aaavein.patience.network.CraftingExhaustionPayload;
 import net.aaavein.patience.util.SlotRange;
 import net.aaavein.patience.util.SpeedCalculator;
 
@@ -256,6 +258,10 @@ public final class CraftingHandler {
     }
 
     private void completeCraft(ContainerSettings container) {
+        if (config.getExhaustionCost() > 0) {
+            PacketDistributor.sendToServer(new CraftingExhaustionPayload(config.getExhaustionCost()));
+        }
+
         if (config.isSoundsEnabled()) {
             playFinishSound(getEffectiveFinishSound(container));
         }
@@ -443,7 +449,9 @@ public final class CraftingHandler {
             int cost = menu.getCost();
 
             if (cost <= 0) return false;
-            return player.getAbilities().instabuild || player.experienceLevel >= cost;
+            if (!player.getAbilities().instabuild && player.experienceLevel < cost) {
+                return false;
+            }
         }
 
         return true;

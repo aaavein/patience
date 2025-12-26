@@ -33,6 +33,9 @@ public class PatienceConfig {
     @SerializedName("max_level_cap")
     private int maxLevelCap;
 
+    @SerializedName("exhaustion_cost")
+    private float exhaustionCost;
+
     @SerializedName("containers")
     private List<ContainerSettings> containers;
 
@@ -51,6 +54,7 @@ public class PatienceConfig {
         this.baseCraftingSpeed = 1.0F;
         this.speedPerLevel = 0.02F;
         this.maxLevelCap = 200;
+        this.exhaustionCost = 0.1F;
     }
 
     public boolean isDebug() {
@@ -87,6 +91,10 @@ public class PatienceConfig {
 
     public int getMaxLevelCap() {
         return maxLevelCap;
+    }
+
+    public float getExhaustionCost() {
+        return exhaustionCost;
     }
 
     public List<ContainerSettings> getContainers() {
@@ -137,6 +145,10 @@ public class PatienceConfig {
         this.maxLevelCap = maxLevelCap;
     }
 
+    public void setExhaustionCost(float exhaustionCost) {
+        this.exhaustionCost = exhaustionCost;
+    }
+
     public void setContainers(List<ContainerSettings> containers) {
         this.containers = containers;
     }
@@ -157,6 +169,7 @@ public class PatienceConfig {
                 ", global_time_multiplier=" + globalTimeMultiplier +
                 ", experience_multiplier=" + experienceMultiplier +
                 ", base_speed=" + baseCraftingSpeed +
+                ", exhaustion_cost=" + exhaustionCost +
                 '}';
     }
 
@@ -209,6 +222,11 @@ public class PatienceConfig {
 
         public Builder maxLevelCap(int level) {
             config.setMaxLevelCap(level);
+            return this;
+        }
+
+        public Builder exhaustionCost(float cost) {
+            config.setExhaustionCost(cost);
             return this;
         }
 
