@@ -44,6 +44,12 @@ public class PatienceConfig {
     @SerializedName("decay_rate")
     private float decayRate;
 
+    @SerializedName("enable_screen_shake")
+    private boolean enableScreenShake;
+
+    @SerializedName("screen_shake_intensity")
+    private float screenShakeIntensity;
+
     @SerializedName("item_sounds")
     private Map<String, String> itemSounds;
 
@@ -66,8 +72,10 @@ public class PatienceConfig {
         this.speedPerLevel = 0.02F;
         this.maxLevelCap = 200;
         this.exhaustionCost = 0.1F;
-        this.enableDecay = false;
+        this.enableDecay = true;
         this.decayRate = 2.0F;
+        this.enableScreenShake = true;
+        this.screenShakeIntensity = 0.5F;
         this.itemSounds = new HashMap<>();
     }
 
@@ -117,6 +125,14 @@ public class PatienceConfig {
 
     public float getDecayRate() {
         return decayRate;
+    }
+
+    public boolean isScreenShakeEnabled() {
+        return enableScreenShake;
+    }
+
+    public float getScreenShakeIntensity() {
+        return screenShakeIntensity;
     }
 
     public Map<String, String> getItemSounds() {
@@ -183,6 +199,14 @@ public class PatienceConfig {
         this.decayRate = decayRate;
     }
 
+    public void setEnableScreenShake(boolean enableScreenShake) {
+        this.enableScreenShake = enableScreenShake;
+    }
+
+    public void setScreenShakeIntensity(float screenShakeIntensity) {
+        this.screenShakeIntensity = screenShakeIntensity;
+    }
+
     public void setItemSounds(Map<String, String> itemSounds) {
         this.itemSounds = itemSounds;
     }
@@ -209,6 +233,7 @@ public class PatienceConfig {
                 ", base_speed=" + baseCraftingSpeed +
                 ", exhaustion_cost=" + exhaustionCost +
                 ", enable_decay=" + enableDecay +
+                ", enable_shake=" + enableScreenShake +
                 ", item_sounds=" + (itemSounds != null ? itemSounds.size() : 0) +
                 '}';
     }
@@ -277,6 +302,16 @@ public class PatienceConfig {
 
         public Builder decayRate(float rate) {
             config.setDecayRate(rate);
+            return this;
+        }
+
+        public Builder enableScreenShake(boolean enable) {
+            config.setEnableScreenShake(enable);
+            return this;
+        }
+
+        public Builder screenShakeIntensity(float intensity) {
+            config.setScreenShakeIntensity(intensity);
             return this;
         }
 

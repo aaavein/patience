@@ -59,6 +59,7 @@ public final class CraftingHandler {
     private CraftingSoundInstance currentSound;
     private String currentSoundId;
     private int soundTicks;
+    private float currentShake;
 
     private CraftingHandler() {}
 
@@ -95,6 +96,10 @@ public final class CraftingHandler {
 
     public float getTotalTime() {
         return totalTime;
+    }
+
+    public float getCurrentShake() {
+        return currentShake;
     }
 
     public void setScreen(Object screen) {
@@ -198,6 +203,7 @@ public final class CraftingHandler {
         this.crafting = false;
         this.continuous = false;
         this.currentContainer = null;
+        this.currentShake = 0;
 
         if (!config.isDecayEnabled()) {
             this.currentTime = 0;
@@ -214,6 +220,11 @@ public final class CraftingHandler {
         if (isCreative()) {
             if (crafting) stopCrafting();
             return;
+        }
+
+        if (currentShake > 0) {
+            currentShake -= 0.02F;
+            if (currentShake < 0) currentShake = 0;
         }
 
         ContainerSettings container = getCurrentContainerSettings();
@@ -237,6 +248,7 @@ public final class CraftingHandler {
 
     private void decayProgress() {
         currentTime -= config.getDecayRate();
+        currentShake = 0;
         if (currentTime <= 0) {
             currentTime = 0;
             stopCrafting();
@@ -435,6 +447,10 @@ public final class CraftingHandler {
     private void playSound(String soundId) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player != null) {
+            if (config.isScreenShakeEnabled()) {
+                currentShake = config.getScreenShakeIntensity();
+            }
+
             if (soundId != null && !soundId.isEmpty()) {
                 currentSound = new CraftingSoundInstance(ResourceLocation.parse(soundId));
             } else {
@@ -541,7 +557,9 @@ public final class CraftingHandler {
             int cost = menu.getCost();
 
             if (cost <= 0) return false;
-            return player.getAbilities().instabuild || player.experienceLevel >= cost;
+            if (!player.getAbilities().instabuild && player.experienceLevel < cost) {
+                return false;
+            }
         }
 
         return true;
