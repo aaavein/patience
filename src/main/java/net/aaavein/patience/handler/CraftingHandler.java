@@ -243,7 +243,12 @@ public final class CraftingHandler {
         }
 
         if (currentTime < totalTime) {
-            float speed = SpeedCalculator.getCraftingSpeed(getPlayerLevel());
+            float speed = SpeedCalculator.getCraftingSpeed(
+                    getPlayerLevel(),
+                    config.getBaseCraftingSpeed(),
+                    config.getSpeedPerLevel(),
+                    config.getMaxLevelCap()
+            );
             currentTime += speed * config.getExperienceMultiplier();
         } else {
             completeCraft(container);
@@ -438,9 +443,7 @@ public final class CraftingHandler {
             int cost = menu.getCost();
 
             if (cost <= 0) return false;
-            if (!player.getAbilities().instabuild && player.experienceLevel < cost) {
-                return false;
-            }
+            return player.getAbilities().instabuild || player.experienceLevel >= cost;
         }
 
         return true;

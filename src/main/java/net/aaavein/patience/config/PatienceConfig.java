@@ -24,6 +24,15 @@ public class PatienceConfig {
     @SerializedName("experience_multiplier")
     private float experienceMultiplier;
 
+    @SerializedName("base_crafting_speed")
+    private float baseCraftingSpeed;
+
+    @SerializedName("speed_per_level")
+    private float speedPerLevel;
+
+    @SerializedName("max_level_cap")
+    private int maxLevelCap;
+
     @SerializedName("containers")
     private List<ContainerSettings> containers;
 
@@ -39,6 +48,9 @@ public class PatienceConfig {
         this.defaultFinishSound = "patience:finish";
         this.globalTimeMultiplier = 1.0F;
         this.experienceMultiplier = 1.0F;
+        this.baseCraftingSpeed = 1.0F;
+        this.speedPerLevel = 0.02F;
+        this.maxLevelCap = 200;
     }
 
     public boolean isDebug() {
@@ -63,6 +75,18 @@ public class PatienceConfig {
 
     public float getExperienceMultiplier() {
         return experienceMultiplier;
+    }
+
+    public float getBaseCraftingSpeed() {
+        return baseCraftingSpeed;
+    }
+
+    public float getSpeedPerLevel() {
+        return speedPerLevel;
+    }
+
+    public int getMaxLevelCap() {
+        return maxLevelCap;
     }
 
     public List<ContainerSettings> getContainers() {
@@ -101,6 +125,18 @@ public class PatienceConfig {
         this.experienceMultiplier = experienceMultiplier;
     }
 
+    public void setBaseCraftingSpeed(float baseCraftingSpeed) {
+        this.baseCraftingSpeed = baseCraftingSpeed;
+    }
+
+    public void setSpeedPerLevel(float speedPerLevel) {
+        this.speedPerLevel = speedPerLevel;
+    }
+
+    public void setMaxLevelCap(int maxLevelCap) {
+        this.maxLevelCap = maxLevelCap;
+    }
+
     public void setContainers(List<ContainerSettings> containers) {
         this.containers = containers;
     }
@@ -120,6 +156,7 @@ public class PatienceConfig {
                 ", enable_sounds=" + enableSounds +
                 ", global_time_multiplier=" + globalTimeMultiplier +
                 ", experience_multiplier=" + experienceMultiplier +
+                ", base_speed=" + baseCraftingSpeed +
                 '}';
     }
 
@@ -157,6 +194,21 @@ public class PatienceConfig {
 
         public Builder experienceMultiplier(float multiplier) {
             config.setExperienceMultiplier(multiplier);
+            return this;
+        }
+
+        public Builder baseCraftingSpeed(float speed) {
+            config.setBaseCraftingSpeed(speed);
+            return this;
+        }
+
+        public Builder speedPerLevel(float speed) {
+            config.setSpeedPerLevel(speed);
+            return this;
+        }
+
+        public Builder maxLevelCap(int level) {
+            config.setMaxLevelCap(level);
             return this;
         }
 
