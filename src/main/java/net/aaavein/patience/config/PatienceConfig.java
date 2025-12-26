@@ -2,7 +2,9 @@ package net.aaavein.patience.config;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PatienceConfig {
 
@@ -42,6 +44,9 @@ public class PatienceConfig {
     @SerializedName("decay_rate")
     private float decayRate;
 
+    @SerializedName("item_sounds")
+    private Map<String, String> itemSounds;
+
     @SerializedName("containers")
     private List<ContainerSettings> containers;
 
@@ -61,8 +66,9 @@ public class PatienceConfig {
         this.speedPerLevel = 0.02F;
         this.maxLevelCap = 200;
         this.exhaustionCost = 0.1F;
-        this.enableDecay = true;
+        this.enableDecay = false;
         this.decayRate = 2.0F;
+        this.itemSounds = new HashMap<>();
     }
 
     public boolean isDebug() {
@@ -111,6 +117,10 @@ public class PatienceConfig {
 
     public float getDecayRate() {
         return decayRate;
+    }
+
+    public Map<String, String> getItemSounds() {
+        return itemSounds;
     }
 
     public List<ContainerSettings> getContainers() {
@@ -173,6 +183,10 @@ public class PatienceConfig {
         this.decayRate = decayRate;
     }
 
+    public void setItemSounds(Map<String, String> itemSounds) {
+        this.itemSounds = itemSounds;
+    }
+
     public void setContainers(List<ContainerSettings> containers) {
         this.containers = containers;
     }
@@ -195,6 +209,7 @@ public class PatienceConfig {
                 ", base_speed=" + baseCraftingSpeed +
                 ", exhaustion_cost=" + exhaustionCost +
                 ", enable_decay=" + enableDecay +
+                ", item_sounds=" + (itemSounds != null ? itemSounds.size() : 0) +
                 '}';
     }
 
@@ -262,6 +277,11 @@ public class PatienceConfig {
 
         public Builder decayRate(float rate) {
             config.setDecayRate(rate);
+            return this;
+        }
+
+        public Builder itemSounds(Map<String, String> sounds) {
+            config.setItemSounds(sounds);
             return this;
         }
 

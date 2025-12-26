@@ -369,8 +369,33 @@ public final class CraftingHandler {
     }
 
     private String getEffectiveCraftingSound(ContainerSettings container) {
+        if (currentScreen != null) {
+            ItemStack output = currentScreen.getMenu().getSlot(container.getOutputSlot()).getItem();
+            if (!output.isEmpty()) {
+                String itemSound = getItemSpecificSound(output);
+                if (itemSound != null && !itemSound.isEmpty()) {
+                    return itemSound;
+                }
+            }
+        }
+
         String sound = container.getCraftingSound();
         return (sound != null && !sound.isEmpty()) ? sound : config.getDefaultCraftingSound();
+    }
+
+    private String getItemSpecificSound(ItemStack stack) {
+        if (config.getItemSounds() == null) return null;
+
+        ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(stack.getItem());
+        String itemSound = config.getItemSounds().get(itemId.toString());
+        if (itemSound != null && !itemSound.isEmpty()) return itemSound;
+
+        for (var tag : stack.getTags().toList()) {
+            String tagSound = config.getItemSounds().get("#" + tag.location().toString());
+            if (tagSound != null && !tagSound.isEmpty()) return tagSound;
+        }
+
+        return null;
     }
 
     private String getEffectiveFinishSound(ContainerSettings container) {
@@ -496,9 +521,7 @@ public final class CraftingHandler {
             int cost = menu.getCost();
 
             if (cost <= 0) return false;
-            if (!player.getAbilities().instabuild && player.experienceLevel < cost) {
-                return false;
-            }
+            return player.getAbilities().instabuild || player.experienceLevel >= cost;
         }
 
         return true;
