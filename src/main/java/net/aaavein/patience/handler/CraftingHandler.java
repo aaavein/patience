@@ -42,19 +42,16 @@ public final class CraftingHandler {
     private AbstractContainerScreen<?> currentScreen;
     private ContainerSettings currentContainer;
 
-    // crafting state
     private boolean crafting;
     private boolean continuous;
     private float currentTime;
     private float totalTime;
     private int waitTicks;
 
-    // position tracking
     private double startX;
     private double startY;
     private double startZ;
 
-    // sound
     private CraftingSoundInstance currentSound;
     private String currentSoundId;
     private int soundTicks;
@@ -119,7 +116,6 @@ public final class CraftingHandler {
                 .orElse(DISABLED);
     }
 
-    // crafting control
 
     public boolean handleSlotClick(Object screen, int slotId, boolean shiftHeld) {
         setScreen(screen);
@@ -139,7 +135,6 @@ public final class CraftingHandler {
             return false;
         }
 
-        // block output slot clicks - crafting only through patience system
         if (isSlotEmpty(container.getOutputSlot())) {
             return true;
         }
@@ -251,7 +246,6 @@ public final class CraftingHandler {
         SlotRange slots = container.getIngredientSlots();
         Object oldItems = getSlotItems(slots);
 
-        // trigger the actual craft
         ((CraftingContainer) currentScreen).patience$completeCraft(
                 currentScreen.getMenu().getSlot(container.getOutputSlot()),
                 container.getOutputSlot()
@@ -262,7 +256,6 @@ public final class CraftingHandler {
             if (!oldItems.equals(newItems) || !canAffordCraft()) {
                 stopCrafting();
             } else {
-                // continue crafting
                 waitTicks = 0;
                 currentTime = 0;
                 if (totalTime >= 10.0F && config.isSoundsEnabled()) {
@@ -274,7 +267,6 @@ public final class CraftingHandler {
         }
     }
 
-    // time calculation
 
     private float calculateCraftTime(ContainerSettings container) {
         float globalMult = config.getGlobalTimeMultiplier();
@@ -307,7 +299,6 @@ public final class CraftingHandler {
         return BASE_CRAFT_TIME * ingredientTime * outputMult * containerMult * globalMult;
     }
 
-    // sound management
 
     private String getEffectiveCraftingSound(ContainerSettings container) {
         String sound = container.getCraftingSound();
@@ -376,7 +367,6 @@ public final class CraftingHandler {
         }
     }
 
-    // player utilities
 
     @OnlyIn(Dist.CLIENT)
     private boolean hasPlayer() {
@@ -441,7 +431,6 @@ public final class CraftingHandler {
         return true;
     }
 
-    // slot utilities
 
     private boolean isSlotEmpty(int slot) {
         if (currentScreen == null) return true;
@@ -483,6 +472,5 @@ public final class CraftingHandler {
         }
     }
 
-    // helper class
     private record ItemInfo(String id, String modId) {}
 }

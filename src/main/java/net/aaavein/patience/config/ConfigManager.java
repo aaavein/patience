@@ -86,7 +86,6 @@ public final class ConfigManager {
                         .build())
                 .build();
 
-        // Add sample entries
         config.getIngredientMultipliers().getByMod().put("minecraft", 1.0F);
         config.getIngredientMultipliers().getByItem().put("minecraft:stick", 1.0F);
         config.getOutputMultipliers().getByMod().put("minecraft", 1.0F);

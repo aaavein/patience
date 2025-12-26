@@ -121,7 +121,7 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
                 int h = (int) (progress * height);
                 graphics.blit(texture, x, y, 0, 0, width, h, width, height);
             }
-            default -> { // right
+            default -> {
                 int w = (int) (progress * width);
                 graphics.blit(texture, x, y, 0, 0, w, height, width, height);
             }
