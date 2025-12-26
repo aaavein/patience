@@ -426,6 +426,7 @@ public final class CraftingHandler {
         if (continuous) {
             Object newItems = getSlotItems(slots);
             if (!oldItems.equals(newItems) || !canAffordCraft()) {
+                this.currentTime = 0;
                 stopCrafting();
             } else {
                 waitTicks = 0;
@@ -438,6 +439,7 @@ public final class CraftingHandler {
                 }
             }
         } else {
+            this.currentTime = 0;
             stopCrafting();
         }
     }
