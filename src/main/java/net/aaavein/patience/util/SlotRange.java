@@ -1,5 +1,7 @@
 package net.aaavein.patience.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -40,7 +42,7 @@ public class SlotRange implements Iterable<Integer> {
     }
 
     @Override
-    public Iterator<Integer> iterator() {
+    public @NotNull Iterator<Integer> iterator() {
         return slots.iterator();
     }
 

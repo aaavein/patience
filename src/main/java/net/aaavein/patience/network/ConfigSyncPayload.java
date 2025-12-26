@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import net.aaavein.patience.config.PatienceConfig;
 import net.aaavein.patience.handler.CraftingHandler;
+import org.jetbrains.annotations.NotNull;
 
 public record ConfigSyncPayload(PatienceConfig config) implements CustomPacketPayload {
     private static final Logger LOGGER = LogManager.getLogger(ConfigSyncPayload.class);
@@ -48,7 +49,7 @@ public record ConfigSyncPayload(PatienceConfig config) implements CustomPacketPa
     }
 
     @Override
-    public Type<? extends CustomPacketPayload> type() {
+    public @NotNull Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
 }
