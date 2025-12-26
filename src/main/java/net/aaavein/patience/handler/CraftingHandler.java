@@ -8,6 +8,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -459,6 +460,8 @@ public final class CraftingHandler {
                 currentShake = config.getScreenShakeIntensity();
             }
 
+            player.swing(InteractionHand.MAIN_HAND);
+
             if (soundId != null && !soundId.isEmpty()) {
                 currentSound = new CraftingSoundInstance(ResourceLocation.parse(soundId));
             } else {
@@ -565,9 +568,7 @@ public final class CraftingHandler {
             int cost = menu.getCost();
 
             if (cost <= 0) return false;
-            if (!player.getAbilities().instabuild && player.experienceLevel < cost) {
-                return false;
-            }
+            return player.getAbilities().instabuild || player.experienceLevel >= cost;
         }
 
         return true;
