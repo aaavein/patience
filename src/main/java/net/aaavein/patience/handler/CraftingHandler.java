@@ -60,7 +60,7 @@ public final class CraftingHandler {
     private double startZ;
 
     private CraftingSoundInstance currentSound;
-    private String currentSoundId;
+    private String cachedItemSound;
     private int soundTicks;
     private float currentShake;
 
@@ -278,6 +278,7 @@ public final class CraftingHandler {
         this.currentShake = 0;
         this.miniGameActive = false;
         this.resultState = 0;
+        this.cachedItemSound = null;
 
         if (!config.getDecay().isEnabled()) {
             this.currentTime = 0;
@@ -500,9 +501,15 @@ public final class CraftingHandler {
             if (!output.isEmpty()) {
                 String itemSound = getItemSpecificSound(output);
                 if (itemSound != null && !itemSound.isEmpty()) {
+                    cachedItemSound = itemSound;
                     return itemSound;
                 }
+                cachedItemSound = null;
             }
+        }
+
+        if (cachedItemSound != null) {
+            return cachedItemSound;
         }
 
         String sound = container.getCraftingSound();
@@ -532,7 +539,6 @@ public final class CraftingHandler {
     @OnlyIn(Dist.CLIENT)
     private void playCraftingSound(String soundId) {
         stopSound();
-        currentSoundId = soundId;
         soundTicks = 0;
         playSound(soundId);
     }
@@ -573,7 +579,9 @@ public final class CraftingHandler {
                 if (!currentSound.isForceStopped()) {
                     currentSound.forceStop();
                 }
-                playSound(currentSoundId);
+
+                String soundId = getEffectiveCraftingSound(currentContainer);
+                playSound(soundId);
             }
         }
     }
