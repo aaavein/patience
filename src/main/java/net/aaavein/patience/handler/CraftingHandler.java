@@ -164,8 +164,6 @@ public final class CraftingHandler {
         }
 
         if (slotId != container.getOutputSlot()) {
-            this.currentTime = 0;
-            stopCrafting();
             return false;
         }
 
@@ -281,6 +279,10 @@ public final class CraftingHandler {
     }
 
     private void stopCrafting() {
+        stopCrafting(false);
+    }
+
+    private void stopCrafting(boolean forceReset) {
         this.crafting = false;
         this.continuous = false;
         this.currentContainer = null;
@@ -291,7 +293,7 @@ public final class CraftingHandler {
         this.cachedItemSound = null;
         this.lockedIngredients = null;
 
-        if (!config.getDecay().isEnabled()) {
+        if (forceReset || !config.getDecay().isEnabled()) {
             this.currentTime = 0;
         }
 
@@ -379,8 +381,7 @@ public final class CraftingHandler {
             List<ItemStack> currentIngredients = getIngredientSnapshot(container.getIngredientSlots());
             if (!areIngredientsEqual(lockedIngredients, currentIngredients)) {
                 logDebug("Ingredients changed during craft, cancelling");
-                this.currentTime = 0;
-                stopCrafting();
+                stopCrafting(true);
                 return;
             }
         }
@@ -390,14 +391,8 @@ public final class CraftingHandler {
         if (isSlotEmpty(outputSlot)) {
             if (++waitTicks > 5) {
                 waitTicks = 0;
-                this.currentTime = 0;
-                stopCrafting();
+                stopCrafting(true);
             }
-            return;
-        }
-
-        if (shouldStopForCarried(outputSlot)) {
-            stopCrafting();
             return;
         }
 
@@ -425,6 +420,10 @@ public final class CraftingHandler {
 
             currentTime += speed * config.getExperience().getMultiplier() * hungerMult;
         } else {
+            if (!currentScreen.getMenu().getCarried().isEmpty()) {
+                return;
+            }
+
             completeCraft(container);
         }
     }
@@ -448,9 +447,9 @@ public final class CraftingHandler {
 
         if (continuous) {
             Object newItems = getSlotItems(slots);
+
             if (!oldItems.equals(newItems) || !canAffordCraft()) {
-                this.currentTime = 0;
-                stopCrafting();
+                stopCrafting(true);
             } else {
                 waitTicks = 0;
                 currentTime = 0;
@@ -461,8 +460,7 @@ public final class CraftingHandler {
                 startCrafting(container, true);
             }
         } else {
-            this.currentTime = 0;
-            stopCrafting();
+            stopCrafting(true);
         }
     }
 
@@ -752,17 +750,6 @@ public final class CraftingHandler {
     private boolean isSlotEmpty(int slot) {
         if (currentScreen == null) return true;
         return currentScreen.getMenu().getSlot(slot).getItem().isEmpty();
-    }
-
-    private boolean shouldStopForCarried(int outputSlot) {
-        if (currentScreen == null) return true;
-
-        ItemStack output = currentScreen.getMenu().getSlot(outputSlot).getItem();
-        ItemStack carried = currentScreen.getMenu().getCarried();
-
-        return !carried.isEmpty() &&
-                (!ItemStack.isSameItem(output, carried) ||
-                        output.getCount() + carried.getCount() > carried.getMaxStackSize());
     }
 
     private Object getSlotItems(SlotRange range) {

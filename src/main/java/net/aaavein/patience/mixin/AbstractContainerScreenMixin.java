@@ -9,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,6 +21,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import net.aaavein.patience.api.CraftingContainer;
 import net.aaavein.patience.config.ContainerSettings;
 import net.aaavein.patience.handler.CraftingHandler;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Mixin(AbstractContainerScreen.class)
 public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMenu>
@@ -51,13 +55,60 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
     @Override
     public void patience$completeCraft(Slot slot, int slotId) {
         patience$completing = true;
+
         slotClicked(slot, slotId, 0, ClickType.PICKUP);
+
+        try {
+            AbstractContainerMenu menu = patience$self.getMenu();
+            ItemStack carried = menu.getCarried();
+
+            if (!carried.isEmpty()) {
+                ContainerSettings settings = CraftingHandler.getInstance().getCurrentContainerSettings();
+
+                List<Integer> excludedSlots = new ArrayList<>();
+                excludedSlots.add(slotId);
+                if (settings != null && settings.getIngredientSlots() != null) {
+                    excludedSlots.addAll(settings.getIngredientSlots().getSlots());
+                }
+
+                for (int i = menu.slots.size() - 1; i >= 0; i--) {
+                    if (carried.isEmpty()) break;
+                    if (excludedSlots.contains(i)) continue;
+
+                    Slot s = menu.slots.get(i);
+                    if (s.hasItem() && s.mayPlace(carried) && ItemStack.isSameItemSameComponents(s.getItem(), carried)) {
+                        if (s.getItem().getCount() < s.getMaxStackSize()) {
+                            slotClicked(s, i, 0, ClickType.PICKUP);
+                            carried = menu.getCarried();
+                        }
+                    }
+                }
+
+                for (int i = menu.slots.size() - 1; i >= 0; i--) {
+                    if (carried.isEmpty()) break;
+                    if (excludedSlots.contains(i)) continue;
+
+                    Slot s = menu.slots.get(i);
+                    if (!s.hasItem() && s.mayPlace(carried)) {
+                        slotClicked(s, i, 0, ClickType.PICKUP);
+                        carried = menu.getCarried();
+                    }
+                }
+
+                if (!carried.isEmpty()) {
+                    slotClicked(null, -999, 0, ClickType.PICKUP);
+                }
+            }
+        } catch (Exception e) {
+            patience$LOGGER.error("Error distributing crafted item", e);
+        }
+
+        patience$completing = false;
     }
 
     @Inject(method = "slotClicked", at = @At("HEAD"), cancellable = true)
     private void patience$onSlotClicked(Slot slot, int slotId, int button, ClickType type, CallbackInfo ci) {
         if (patience$completing) {
-            patience$completing = false;
             return;
         }
 
