@@ -28,4 +28,8 @@
 - [**Easel Does It!**](https://modrinth.com/mod/easel-does-it)
 - [**Galosphere**](https://modrinth.com/mod/galosphere)
 - [**Clayworks**](https://modrinth.com/mod/clayworks)
+
+### 📝 credits
+Inspired by [**Craft Takes Time**](https://github.com/jingshenSN2/CraftTakesTime) by **jingshenSN2** (MIT).
+
 ##### Missing support for a workstation? Open an issue on [GitHub](https://github.com/aaavein/patience/issues) or add it yourself via `config/patience.json`.
