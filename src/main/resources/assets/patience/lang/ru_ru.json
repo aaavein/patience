@@ -12,5 +12,6 @@
   "subtitles.patience.easel": "Мольберт используется",
   "subtitles.patience.combustion_table": "Стол сжигания используется",
   "subtitles.patience.pottery_table": "Гончарный стол используется",
-  "subtitles.patience.sewing_table": "Швейный стол используется"
+  "subtitles.patience.sewing_table": "Швейный стол используется",
+  "attribute.name.patience.crafting_speed": "Скорость создания"
 }

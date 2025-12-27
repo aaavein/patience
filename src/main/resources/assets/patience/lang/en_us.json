@@ -12,5 +12,6 @@
   "subtitles.patience.easel": "Easel used",
   "subtitles.patience.combustion_table": "Combustion Table used",
   "subtitles.patience.pottery_table": "Pottery Table used",
-  "subtitles.patience.sewing_table": "Sewing Table used"
+  "subtitles.patience.sewing_table": "Sewing Table used",
+  "attribute.name.patience.crafting_speed": "Crafting Speed"
 }
