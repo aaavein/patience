@@ -22,9 +22,6 @@ import net.aaavein.patience.api.CraftingContainer;
 import net.aaavein.patience.config.ContainerSettings;
 import net.aaavein.patience.handler.CraftingHandler;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Mixin(AbstractContainerScreen.class)
 public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMenu>
         extends Screen implements CraftingContainer {
@@ -56,54 +53,68 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
     public void patience$completeCraft(Slot slot, int slotId) {
         patience$completing = true;
 
-        slotClicked(slot, slotId, 0, ClickType.PICKUP);
-
         try {
             AbstractContainerMenu menu = patience$self.getMenu();
-            ItemStack carried = menu.getCarried();
+            ItemStack currentlyHolding = menu.getCarried();
+            boolean wasHoldingItem = !currentlyHolding.isEmpty();
+            int stashSlotId = -1;
 
-            if (!carried.isEmpty()) {
-                ContainerSettings settings = CraftingHandler.getInstance().getCurrentContainerSettings();
-
-                List<Integer> excludedSlots = new ArrayList<>();
-                excludedSlots.add(slotId);
-                if (settings != null && settings.getIngredientSlots() != null) {
-                    excludedSlots.addAll(settings.getIngredientSlots().getSlots());
+            if (wasHoldingItem) {
+                stashSlotId = patience$findEmptyPlayerSlot(menu);
+                if (stashSlotId == -1) {
+                    patience$completing = false;
+                    return;
                 }
+                slotClicked(menu.getSlot(stashSlotId), stashSlotId, 0, ClickType.PICKUP);
+            }
 
-                for (int i = menu.slots.size() - 1; i >= 0; i--) {
-                    if (carried.isEmpty()) break;
-                    if (excludedSlots.contains(i)) continue;
+            slotClicked(slot, slotId, 0, ClickType.PICKUP);
+            ItemStack resultOnCursor = menu.getCarried();
 
-                    Slot s = menu.slots.get(i);
-                    if (s.hasItem() && s.mayPlace(carried) && ItemStack.isSameItemSameComponents(s.getItem(), carried)) {
-                        if (s.getItem().getCount() < s.getMaxStackSize()) {
-                            slotClicked(s, i, 0, ClickType.PICKUP);
-                            carried = menu.getCarried();
-                        }
-                    }
-                }
-
-                for (int i = menu.slots.size() - 1; i >= 0; i--) {
-                    if (carried.isEmpty()) break;
-                    if (excludedSlots.contains(i)) continue;
-
-                    Slot s = menu.slots.get(i);
-                    if (!s.hasItem() && s.mayPlace(carried)) {
-                        slotClicked(s, i, 0, ClickType.PICKUP);
-                        carried = menu.getCarried();
-                    }
-                }
-
-                if (!carried.isEmpty()) {
-                    slotClicked(null, -999, 0, ClickType.PICKUP);
+            if (!resultOnCursor.isEmpty()) {
+                int destSlotId = patience$findSlotForStack(menu, resultOnCursor);
+                if (destSlotId != -1) {
+                    slotClicked(menu.getSlot(destSlotId), destSlotId, 0, ClickType.PICKUP);
                 }
             }
+
+            if (wasHoldingItem && stashSlotId != -1) {
+                slotClicked(menu.getSlot(stashSlotId), stashSlotId, 0, ClickType.PICKUP);
+            }
+
         } catch (Exception e) {
             patience$LOGGER.error("Error distributing crafted item", e);
         }
 
         patience$completing = false;
+    }
+
+    @Unique
+    private int patience$findEmptyPlayerSlot(AbstractContainerMenu menu) {
+        int startIndex = Math.max(0, menu.slots.size() - 36);
+        for (int i = menu.slots.size() - 1; i >= startIndex; i--) {
+            Slot s = menu.slots.get(i);
+            if (!s.hasItem()) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    @Unique
+    private int patience$findSlotForStack(AbstractContainerMenu menu, ItemStack stack) {
+        int startIndex = Math.max(0, menu.slots.size() - 36);
+
+        for (int i = menu.slots.size() - 1; i >= startIndex; i--) {
+            Slot s = menu.slots.get(i);
+            if (s.hasItem() && ItemStack.isSameItemSameComponents(s.getItem(), stack)) {
+                if (s.getItem().getCount() + stack.getCount() <= s.getMaxStackSize(stack)) {
+                    return i;
+                }
+            }
+        }
+
+        return patience$findEmptyPlayerSlot(menu);
     }
 
     @Inject(method = "slotClicked", at = @At("HEAD"), cancellable = true)

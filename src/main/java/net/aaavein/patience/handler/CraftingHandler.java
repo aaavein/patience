@@ -420,10 +420,6 @@ public final class CraftingHandler {
 
             currentTime += speed * config.getExperience().getMultiplier() * hungerMult;
         } else {
-            if (!currentScreen.getMenu().getCarried().isEmpty()) {
-                return;
-            }
-
             completeCraft(container);
         }
     }
