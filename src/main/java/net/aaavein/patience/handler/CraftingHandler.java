@@ -283,6 +283,7 @@ public final class CraftingHandler {
         this.currentShake = 0;
         this.miniGameActive = false;
         this.resultState = 0;
+        this.resultTimer = 0;
         this.cachedItemSound = null;
 
         if (!config.getDecay().isEnabled()) {
@@ -438,6 +439,9 @@ public final class CraftingHandler {
             } else {
                 waitTicks = 0;
                 currentTime = 0;
+
+                this.resultState = 0;
+                this.resultTimer = 0;
 
                 setupMiniGame();
 
