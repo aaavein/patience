@@ -158,6 +158,7 @@ public final class CraftingHandler {
         }
 
         if (slotId != container.getOutputSlot()) {
+            this.currentTime = 0;
             stopCrafting();
             return false;
         }
@@ -369,6 +370,7 @@ public final class CraftingHandler {
         if (isSlotEmpty(outputSlot)) {
             if (++waitTicks > 5) {
                 waitTicks = 0;
+                this.currentTime = 0;
                 stopCrafting();
             }
             return;
