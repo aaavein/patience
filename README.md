@@ -3,16 +3,19 @@
 
 ### 🛠️ features
 - **progress overlay**: Visual progress bar with configurable texture, position, and fill direction.
+- **active minigame:** Hit the sweet spot during the craft to finish instantly, or fail and lose progress.
+- **progress decay:** Interrupting a craft decays progress over time.
+- **hunger mechanics:** Crafting drains saturation, and low food levels impose a speed penalty.
+- **immersive feedback:** Visual screen shake and arm animations sync with crafting actions.
+- **attribute system:** Crafting speed is a registered attribute, allowing external modification.
 - **crafting modes:** Normal click crafts once, Shift-click keeps crafting while materials last.
-- **movement detection:** Cancels crafting when motion is detected, compatible with inventory-movement mods.
+- **movement detection:** Cancels or decays crafting when motion is detected, compatible with inventory-movement mods.
 - **experience scaling:** Higher experience levels grant faster crafting speed, rewarding progression with efficiency.
 - **per-container configuration:** Unique time multipliers, sounds, and overlays per workstation.
-- **item-based multipliers:** Adjust time by ingredient or output, per-mod or per-item.
-- **immersive audio:** Looping sounds with periodic pitch randomization.
-- **multiplayer sync:** Server configuration applies to all clients.
-- **mod support:** Wide compatibility out of the box, easily extensible.
+- **flexible multipliers:** Adjust time by ingredient or output, using specific items or tags.
+- **immersive audio:** Looping sounds with periodic pitch randomization and dynamic output-based sounds.
+- **multiplayer sync:** Сonfiguration applies to all clients.
 - **runtime reload:** Instant updates via `/patience reload`.
-
 
 ### 🧩 compatibility
 - [**EMI**](https://modrinth.com/mod/emi)
