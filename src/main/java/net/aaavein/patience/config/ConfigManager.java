@@ -82,12 +82,23 @@ public final class ConfigManager {
                 .byItem(new HashMap<>())
                 .byTag(new HashMap<>())
                 .build());
+        config.setRecipeMultipliers(RecipeSettings.builder()
+                .byType(new HashMap<>())
+                .byRecipe(new HashMap<>())
+                .build());
+
+        config.getItemSounds().put("minecraft:stick", "patience:crafting");
 
         config.getIngredientMultipliers().getByMod().put("minecraft", 1.0F);
         config.getIngredientMultipliers().getByItem().put("minecraft:stick", 1.0F);
+        config.getIngredientMultipliers().getByTag().put("#minecraft:planks", 1.0F);
 
         config.getOutputMultipliers().getByMod().put("minecraft", 1.0F);
         config.getOutputMultipliers().getByItem().put("minecraft:stick", 1.0F);
+        config.getOutputMultipliers().getByTag().put("#minecraft:planks", 1.0F);
+
+        config.getRecipeMultipliers().getByType().put("minecraft:crafting", 1.0F);
+        config.getRecipeMultipliers().getByRecipe().put("minecraft:stick", 1.0F);
 
         save(config);
     }

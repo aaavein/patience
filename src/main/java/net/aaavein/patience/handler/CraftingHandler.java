@@ -10,9 +10,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.inventory.AnvilMenu;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -26,6 +28,7 @@ import net.aaavein.patience.config.ConfigManager;
 import net.aaavein.patience.config.ContainerSettings;
 import net.aaavein.patience.config.ItemSettings;
 import net.aaavein.patience.config.PatienceConfig;
+import net.aaavein.patience.config.RecipeSettings;
 import net.aaavein.patience.network.CraftingExhaustionPayload;
 import net.aaavein.patience.registry.AttributeRegistry;
 import net.aaavein.patience.util.SlotRange;
@@ -33,6 +36,7 @@ import net.aaavein.patience.util.SpeedCalculator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public final class CraftingHandler {
     private static final Logger LOGGER = LogManager.getLogger(CraftingHandler.class);
@@ -483,7 +487,68 @@ public final class CraftingHandler {
             outputMult = modMult * itemMult * tagMult;
         }
 
-        return BASE_CRAFT_TIME * ingredientTime * outputMult * containerMult * globalMult;
+        float recipeMult = getRecipeMultiplier(container);
+
+        return BASE_CRAFT_TIME * ingredientTime * outputMult * recipeMult * containerMult * globalMult;
+    }
+
+    private ResourceLocation getAutomaticRecipeType() {
+        if (currentScreen == null) return BuiltInRegistries.RECIPE_TYPE.getKey(RecipeType.CRAFTING);
+        AbstractContainerMenu menu = currentScreen.getMenu();
+
+        if (menu instanceof CraftingMenu || menu instanceof InventoryMenu) return BuiltInRegistries.RECIPE_TYPE.getKey(RecipeType.CRAFTING);
+        return switch (menu) {
+            case StonecutterMenu stonecutterMenu -> BuiltInRegistries.RECIPE_TYPE.getKey(RecipeType.STONECUTTING);
+            case SmithingMenu smithingMenu -> BuiltInRegistries.RECIPE_TYPE.getKey(RecipeType.SMITHING);
+            case AbstractFurnaceMenu abstractFurnaceMenu -> BuiltInRegistries.RECIPE_TYPE.getKey(RecipeType.SMELTING);
+            default -> BuiltInRegistries.RECIPE_TYPE.getKey(RecipeType.CRAFTING);
+        };
+
+    }
+
+    private float getRecipeMultiplier(ContainerSettings container) {
+        if (config.getRecipeMultipliers() == null || currentScreen == null) return 1.0F;
+
+        RecipeSettings settings = config.getRecipeMultipliers();
+        if (settings.getByType().isEmpty() && settings.getByRecipe().isEmpty()) return 1.0F;
+
+        String recipeTypeKey = container.getRecipeType();
+        if (recipeTypeKey == null || recipeTypeKey.isEmpty()) {
+            recipeTypeKey = getAutomaticRecipeType().toString();
+        }
+
+        float typeMult = settings.getByType().getOrDefault(recipeTypeKey, 1.0F);
+
+        ItemStack outputStack = currentScreen.getMenu().getSlot(container.getOutputSlot()).getItem();
+        if (outputStack.isEmpty()) return typeMult;
+
+        if (!settings.getByRecipe().isEmpty()) {
+            try {
+                if (Minecraft.getInstance().level != null) {
+                    ResourceLocation typeId = ResourceLocation.parse(recipeTypeKey);
+                    Optional<RecipeType<?>> typeOpt = BuiltInRegistries.RECIPE_TYPE.getOptional(typeId);
+
+                    if (typeOpt.isPresent()) {
+                        var recipeManager = Minecraft.getInstance().level.getRecipeManager();
+
+                        @SuppressWarnings("unchecked")
+                        List<RecipeHolder<?>> recipes = (List<RecipeHolder<?>>) (List<?>) recipeManager.getAllRecipesFor((RecipeType) typeOpt.get());
+
+                        for (RecipeHolder<?> holder : recipes) {
+                            if (ItemStack.isSameItem(holder.value().getResultItem(Minecraft.getInstance().level.registryAccess()), outputStack)) {
+                                String recipeId = holder.id().toString();
+                                if (settings.getByRecipe().containsKey(recipeId)) {
+                                    return typeMult * settings.getByRecipe().get(recipeId);
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (Exception ignored) {
+            }
+        }
+
+        return typeMult;
     }
 
     private float getTagMultiplier(ItemStack stack, ItemSettings settings) {

@@ -50,6 +50,9 @@ public class PatienceConfig {
     @SerializedName("output_multipliers")
     private ItemSettings outputMultipliers;
 
+    @SerializedName("recipe_multipliers")
+    private RecipeSettings recipeMultipliers;
+
     public PatienceConfig() {
         this.debug = false;
         this.enableSounds = true;
@@ -80,7 +83,6 @@ public class PatienceConfig {
         public float getBaseSpeed() { return baseSpeed; }
         public float getSpeedPerLevel() { return speedPerLevel; }
         public int getMaxLevelCap() { return maxLevelCap; }
-
         public void setMultiplier(float val) { this.multiplier = val; }
         public void setBaseSpeed(float val) { this.baseSpeed = val; }
         public void setSpeedPerLevel(float val) { this.speedPerLevel = val; }
@@ -95,7 +97,6 @@ public class PatienceConfig {
 
         public boolean isEnabled() { return enabled; }
         public float getRate() { return rate; }
-
         public void setEnabled(boolean val) { this.enabled = val; }
         public void setRate(float val) { this.rate = val; }
     }
@@ -108,7 +109,6 @@ public class PatienceConfig {
 
         public boolean isEnabled() { return enabled; }
         public float getIntensity() { return intensity; }
-
         public void setEnabled(boolean val) { this.enabled = val; }
         public void setIntensity(float val) { this.intensity = val; }
     }
@@ -127,7 +127,6 @@ public class PatienceConfig {
         public boolean isPenaltyEnabled() { return penaltyEnabled; }
         public int getThreshold() { return threshold; }
         public float getPenaltyMultiplier() { return penaltyMultiplier; }
-
         public void setExhaustionCost(float val) { this.exhaustionCost = val; }
         public void setPenaltyEnabled(boolean val) { this.penaltyEnabled = val; }
         public void setThreshold(int val) { this.threshold = val; }
@@ -148,7 +147,6 @@ public class PatienceConfig {
         public float getChance() { return chance; }
         public float getWindowWidth() { return windowWidth; }
         public float getPenaltyPercent() { return penaltyPercent; }
-
         public void setEnabled(boolean val) { this.enabled = val; }
         public void setChance(float val) { this.chance = val; }
         public void setWindowWidth(float val) { this.windowWidth = val; }
@@ -171,6 +169,7 @@ public class PatienceConfig {
     public List<ContainerSettings> getContainers() { return containers; }
     public ItemSettings getIngredientMultipliers() { return ingredientMultipliers; }
     public ItemSettings getOutputMultipliers() { return outputMultipliers; }
+    public RecipeSettings getRecipeMultipliers() { return recipeMultipliers; }
 
     public void setDebug(boolean debug) { this.debug = debug; }
     public void setEnableSounds(boolean enableSounds) { this.enableSounds = enableSounds; }
@@ -188,6 +187,7 @@ public class PatienceConfig {
     public void setContainers(List<ContainerSettings> containers) { this.containers = containers; }
     public void setIngredientMultipliers(ItemSettings ingredientMultipliers) { this.ingredientMultipliers = ingredientMultipliers; }
     public void setOutputMultipliers(ItemSettings outputMultipliers) { this.outputMultipliers = outputMultipliers; }
+    public void setRecipeMultipliers(RecipeSettings recipeMultipliers) { this.recipeMultipliers = recipeMultipliers; }
 
     public static Builder builder() { return new Builder(); }
 
@@ -210,6 +210,7 @@ public class PatienceConfig {
         public Builder containers(List<ContainerSettings> val) { config.setContainers(val); return this; }
         public Builder ingredientMultipliers(ItemSettings val) { config.setIngredientMultipliers(val); return this; }
         public Builder outputMultipliers(ItemSettings val) { config.setOutputMultipliers(val); return this; }
+        public Builder recipeMultipliers(RecipeSettings val) { config.setRecipeMultipliers(val); return this; }
 
         public PatienceConfig build() { return config; }
     }
