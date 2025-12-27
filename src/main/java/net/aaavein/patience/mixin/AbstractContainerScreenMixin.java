@@ -59,8 +59,15 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
             boolean wasHoldingItem = !currentlyHolding.isEmpty();
             int stashSlotId = -1;
 
+            ContainerSettings settings = CraftingHandler.getInstance().getCurrentContainerSettings();
+            int startSearchIndex = settings.getResultSlot();
+
+            if (startSearchIndex < 0) {
+                startSearchIndex = Math.max(0, menu.slots.size() - 36);
+            }
+
             if (wasHoldingItem) {
-                stashSlotId = patience$findEmptyPlayerSlot(menu);
+                stashSlotId = patience$findEmptyPlayerSlot(menu, startSearchIndex);
                 if (stashSlotId == -1) {
                     patience$completing = false;
                     return;
@@ -72,7 +79,7 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
             ItemStack resultOnCursor = menu.getCarried();
 
             if (!resultOnCursor.isEmpty()) {
-                int destSlotId = patience$findSlotForStack(menu, resultOnCursor);
+                int destSlotId = patience$findSlotForStack(menu, resultOnCursor, startSearchIndex);
                 if (destSlotId != -1) {
                     slotClicked(menu.getSlot(destSlotId), destSlotId, 0, ClickType.PICKUP);
                 }
@@ -90,11 +97,11 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
     }
 
     @Unique
-    private int patience$findEmptyPlayerSlot(AbstractContainerMenu menu) {
-        int startIndex = Math.max(0, menu.slots.size() - 36);
-        for (int i = menu.slots.size() - 1; i >= startIndex; i--) {
+    private int patience$findEmptyPlayerSlot(AbstractContainerMenu menu, int startIndex) {
+        int limit = menu.slots.size();
+        for (int i = startIndex; i < limit; i++) {
             Slot s = menu.slots.get(i);
-            if (!s.hasItem()) {
+            if (!s.hasItem() && s.mayPlace(ItemStack.EMPTY)) {
                 return i;
             }
         }
@@ -102,10 +109,10 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
     }
 
     @Unique
-    private int patience$findSlotForStack(AbstractContainerMenu menu, ItemStack stack) {
-        int startIndex = Math.max(0, menu.slots.size() - 36);
+    private int patience$findSlotForStack(AbstractContainerMenu menu, ItemStack stack, int startIndex) {
+        int limit = menu.slots.size();
 
-        for (int i = menu.slots.size() - 1; i >= startIndex; i--) {
+        for (int i = startIndex; i < limit; i++) {
             Slot s = menu.slots.get(i);
             if (s.hasItem() && ItemStack.isSameItemSameComponents(s.getItem(), stack)) {
                 if (s.getItem().getCount() + stack.getCount() <= s.getMaxStackSize(stack)) {
@@ -114,7 +121,7 @@ public abstract class AbstractContainerScreenMixin<T extends AbstractContainerMe
             }
         }
 
-        return patience$findEmptyPlayerSlot(menu);
+        return patience$findEmptyPlayerSlot(menu, startIndex);
     }
 
     @Inject(method = "slotClicked", at = @At("HEAD"), cancellable = true)

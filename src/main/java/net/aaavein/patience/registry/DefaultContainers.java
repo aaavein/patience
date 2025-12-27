@@ -14,6 +14,7 @@ public final class DefaultContainers {
                 .name("minecraft:inventory")
                 .screenClass("net.minecraft.client.gui.screens.inventory.InventoryScreen")
                 .ingredientSlots(SlotRange.parse("1-4"))
+                .resultSlot(9)
                 .overlayTexture("patience:textures/inventory.png")
                 .overlayX(134)
                 .overlayY(28)
@@ -25,6 +26,7 @@ public final class DefaultContainers {
                 .name("minecraft:inventory")
                 .screenClass("top.theillusivec4.curios.client.gui.CuriosScreen")
                 .ingredientSlots(SlotRange.parse("1-4"))
+                .resultSlot(9)
                 .overlayTexture("patience:textures/inventory.png")
                 .overlayX(134)
                 .overlayY(28)
@@ -35,6 +37,7 @@ public final class DefaultContainers {
         register(ContainerSettings.builder()
                 .name("minecraft:crafting_table")
                 .screenClass("net.minecraft.client.gui.screens.inventory.CraftingScreen")
+                .resultSlot(10)
                 .build());
 
         register(ContainerSettings.builder()
@@ -42,6 +45,7 @@ public final class DefaultContainers {
                 .screenClass("net.minecraft.client.gui.screens.inventory.SmithingScreen")
                 .ingredientSlots(SlotRange.parse("0-2"))
                 .outputSlot(3)
+                .resultSlot(4)
                 .overlayX(67)
                 .overlayY(48)
                 .craftingSound("patience:smithing_table")
@@ -52,6 +56,7 @@ public final class DefaultContainers {
                 .screenClass("net.minecraft.client.gui.screens.inventory.AnvilScreen")
                 .ingredientSlots(SlotRange.parse("0-1"))
                 .outputSlot(2)
+                .resultSlot(3)
                 .overlayX(101)
                 .overlayY(47)
                 .craftingSound("patience:anvil")
@@ -62,6 +67,7 @@ public final class DefaultContainers {
                 .screenClass("net.minecraft.client.gui.screens.inventory.GrindstoneScreen")
                 .ingredientSlots(SlotRange.parse("0-1"))
                 .outputSlot(2)
+                .resultSlot(3)
                 .overlayX(94)
                 .overlayY(33)
                 .craftingSound("patience:grindstone")
@@ -72,6 +78,7 @@ public final class DefaultContainers {
                 .screenClass("net.minecraft.client.gui.screens.inventory.StonecutterScreen")
                 .ingredientSlots(SlotRange.parse("0"))
                 .outputSlot(1)
+                .resultSlot(2)
                 .showOverlay(false)
                 .craftingSound("patience:stonecutter")
                 .build());
@@ -81,6 +88,7 @@ public final class DefaultContainers {
                 .screenClass("net.minecraft.client.gui.screens.inventory.CartographyTableScreen")
                 .ingredientSlots(SlotRange.parse("0-1"))
                 .outputSlot(2)
+                .resultSlot(3)
                 .showOverlay(false)
                 .craftingSound("patience:cartography_table")
                 .build());
@@ -90,6 +98,7 @@ public final class DefaultContainers {
                 .screenClass("net.minecraft.client.gui.screens.inventory.LoomScreen")
                 .ingredientSlots(SlotRange.parse("0-2"))
                 .outputSlot(3)
+                .resultSlot(4)
                 .showOverlay(false)
                 .craftingSound("patience:loom")
                 .build());
@@ -99,6 +108,7 @@ public final class DefaultContainers {
                 .screenClass("net.mehvahdjukaar.sawmill.SawmillScreen")
                 .ingredientSlots(SlotRange.parse("0"))
                 .outputSlot(1)
+                .resultSlot(2)
                 .showOverlay(false)
                 .craftingSound("patience:sawmill")
                 .build());
@@ -108,6 +118,7 @@ public final class DefaultContainers {
                 .screenClass("com.teamabnormals.woodworks.client.gui.screens.inventory.SawmillScreen")
                 .ingredientSlots(SlotRange.parse("0"))
                 .outputSlot(1)
+                .resultSlot(2)
                 .showOverlay(false)
                 .craftingSound("patience:sawmill")
                 .build());
@@ -117,6 +128,7 @@ public final class DefaultContainers {
                 .screenClass("com.dolthhaven.easeldoesit.common.inventory.EaselScreen")
                 .ingredientSlots(SlotRange.parse("0"))
                 .outputSlot(1)
+                .resultSlot(2)
                 .showOverlay(false)
                 .craftingSound("patience:easel")
                 .build());
@@ -126,6 +138,7 @@ public final class DefaultContainers {
                 .screenClass("net.orcinus.galosphere.client.gui.CombustionTableScreen")
                 .ingredientSlots(SlotRange.parse("0-3"))
                 .outputSlot(4)
+                .resultSlot(5)
                 .showOverlay(false)
                 .craftingSound("patience:combustion_table")
                 .build());
@@ -135,6 +148,7 @@ public final class DefaultContainers {
                 .screenClass("com.teamabnormals.clayworks.client.gui.screens.inventory.PotteryScreen")
                 .ingredientSlots(SlotRange.parse("0-2"))
                 .outputSlot(3)
+                .resultSlot(4)
                 .showOverlay(false)
                 .craftingSound("patience:pottery_table")
                 .build());
@@ -144,6 +158,7 @@ public final class DefaultContainers {
                 .screenClass("com.momosoftworks.coldsweat.client.gui.SewingScreen")
                 .ingredientSlots(SlotRange.parse("0-1"))
                 .outputSlot(2)
+                .resultSlot(3)
                 .showOverlay(false)
                 .craftingSound("patience:sewing_table")
                 .build());

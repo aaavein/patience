@@ -25,6 +25,9 @@ public class ContainerSettings {
     @SerializedName("output_slot")
     private int outputSlot;
 
+    @SerializedName("result_slot")
+    private int resultSlot;
+
     @SerializedName("ingredient_slots")
     private SlotRange ingredientSlots;
 
@@ -59,6 +62,7 @@ public class ContainerSettings {
         this.enabled = true;
         this.timeMultiplier = 1.0F;
         this.outputSlot = 0;
+        this.resultSlot = -1;
         this.ingredientSlots = new SlotRange(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
         this.showOverlay = true;
         this.overlayTexture = "patience:textures/generic.png";
@@ -78,6 +82,7 @@ public class ContainerSettings {
     public String getRecipeType() { return recipeType; }
     public float getTimeMultiplier() { return timeMultiplier; }
     public int getOutputSlot() { return outputSlot; }
+    public int getResultSlot() { return resultSlot; }
     public SlotRange getIngredientSlots() { return ingredientSlots; }
     public boolean isShowOverlay() { return showOverlay; }
     public String getOverlayTexture() { return overlayTexture; }
@@ -95,6 +100,7 @@ public class ContainerSettings {
     public void setRecipeType(String recipeType) { this.recipeType = recipeType; }
     public void setTimeMultiplier(float timeMultiplier) { this.timeMultiplier = timeMultiplier; }
     public void setOutputSlot(int outputSlot) { this.outputSlot = outputSlot; }
+    public void setResultSlot(int resultSlot) { this.resultSlot = resultSlot; }
     public void setIngredientSlots(SlotRange ingredientSlots) { this.ingredientSlots = ingredientSlots; }
     public void setShowOverlay(boolean showOverlay) { this.showOverlay = showOverlay; }
     public void setOverlayTexture(String overlayTexture) { this.overlayTexture = overlayTexture; }
@@ -119,6 +125,7 @@ public class ContainerSettings {
         public Builder recipeType(String recipeType) { settings.setRecipeType(recipeType); return this; }
         public Builder timeMultiplier(float multiplier) { settings.setTimeMultiplier(multiplier); return this; }
         public Builder outputSlot(int slot) { settings.setOutputSlot(slot); return this; }
+        public Builder resultSlot(int slot) { settings.setResultSlot(slot); return this; }
         public Builder ingredientSlots(SlotRange slots) { settings.setIngredientSlots(slots); return this; }
         public Builder showOverlay(boolean show) { settings.setShowOverlay(show); return this; }
         public Builder overlayTexture(String texture) { settings.setOverlayTexture(texture); return this; }
