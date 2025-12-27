@@ -63,6 +63,8 @@ public final class CraftingHandler {
     private double startY;
     private double startZ;
 
+    private List<ItemStack> lockedIngredients;
+
     private CraftingSoundInstance currentSound;
     private String cachedItemSound;
     private int soundTicks;
@@ -260,6 +262,8 @@ public final class CraftingHandler {
         this.continuous = continuous;
         this.crafting = true;
 
+        this.lockedIngredients = getIngredientSnapshot(container.getIngredientSlots());
+
         float newTotalTime = calculateCraftTime(container);
         if (!config.getDecay().isEnabled() || currentTime > newTotalTime) {
             this.currentTime = 0;
@@ -285,6 +289,7 @@ public final class CraftingHandler {
         this.resultState = 0;
         this.resultTimer = 0;
         this.cachedItemSound = null;
+        this.lockedIngredients = null;
 
         if (!config.getDecay().isEnabled()) {
             this.currentTime = 0;
@@ -370,6 +375,16 @@ public final class CraftingHandler {
             return;
         }
 
+        if (lockedIngredients != null) {
+            List<ItemStack> currentIngredients = getIngredientSnapshot(container.getIngredientSlots());
+            if (!areIngredientsEqual(lockedIngredients, currentIngredients)) {
+                logDebug("Ingredients changed during craft, cancelling");
+                this.currentTime = 0;
+                stopCrafting();
+                return;
+            }
+        }
+
         int outputSlot = container.getOutputSlot();
 
         if (isSlotEmpty(outputSlot)) {
@@ -443,11 +458,7 @@ public final class CraftingHandler {
                 this.resultState = 0;
                 this.resultTimer = 0;
 
-                setupMiniGame();
-
-                if (totalTime >= 10.0F && config.isSoundsEnabled()) {
-                    playCraftingSound(getEffectiveCraftingSound(container));
-                }
+                startCrafting(container, true);
             }
         } else {
             this.currentTime = 0;
@@ -762,6 +773,30 @@ public final class CraftingHandler {
             items.add(currentScreen.getMenu().getSlot(slot).getItem().getItem());
         }
         return items;
+    }
+
+    private List<ItemStack> getIngredientSnapshot(SlotRange range) {
+        List<ItemStack> snapshot = new ArrayList<>();
+        if (currentScreen == null) return snapshot;
+
+        for (int slot : range) {
+            snapshot.add(currentScreen.getMenu().getSlot(slot).getItem().copy());
+        }
+        return snapshot;
+    }
+
+    private boolean areIngredientsEqual(List<ItemStack> original, List<ItemStack> current) {
+        if (original.size() != current.size()) return false;
+
+        for (int i = 0; i < original.size(); i++) {
+            ItemStack o = original.get(i);
+            ItemStack c = current.get(i);
+
+            if (!ItemStack.matches(o, c)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void logDebug(String message) {
