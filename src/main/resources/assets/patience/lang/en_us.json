@@ -1,0 +1,17 @@
+{
+  "command.patience.reload.success": "Patience config reloaded and synced to all players.",
+  "subtitles.patience.crafting": "Crafting",
+  "subtitles.patience.finish": "Item crafted",
+  "subtitles.patience.smithing_table": "Smithing Table used",
+  "subtitles.patience.anvil": "Anvil used",
+  "subtitles.patience.grindstone": "Grindstone used",
+  "subtitles.patience.stonecutter": "Stonecutter used",
+  "subtitles.patience.cartography_table": "Cartography Table used",
+  "subtitles.patience.loom": "Loom used",
+  "subtitles.patience.sawmill": "Sawmill used",
+  "subtitles.patience.easel": "Easel used",
+  "subtitles.patience.combustion_table": "Combustion Table used",
+  "subtitles.patience.pottery_table": "Pottery Table used",
+  "subtitles.patience.sewing_table": "Sewing Table used",
+  "attribute.name.patience.crafting_speed": "Crafting Speed"
+}

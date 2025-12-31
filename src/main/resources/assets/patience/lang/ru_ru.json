@@ -1,0 +1,17 @@
+{
+  "command.patience.reload.success": "Конфигурация Patience перезагружена и отправлена всем игрокам.",
+  "subtitles.patience.crafting": "Создание предмета",
+  "subtitles.patience.finish": "Предмет создан",
+  "subtitles.patience.smithing_table": "Кузнечный стол используется",
+  "subtitles.patience.anvil": "Наковальня используется",
+  "subtitles.patience.grindstone": "Точило используется",
+  "subtitles.patience.stonecutter": "Камнерез используется",
+  "subtitles.patience.cartography_table": "Стол картографа используется",
+  "subtitles.patience.loom": "Ткацкий станок используется",
+  "subtitles.patience.sawmill": "Лесопилка используется",
+  "subtitles.patience.easel": "Мольберт используется",
+  "subtitles.patience.combustion_table": "Стол сжигания используется",
+  "subtitles.patience.pottery_table": "Гончарный стол используется",
+  "subtitles.patience.sewing_table": "Швейный стол используется",
+  "attribute.name.patience.crafting_speed": "Скорость создания"
+}
