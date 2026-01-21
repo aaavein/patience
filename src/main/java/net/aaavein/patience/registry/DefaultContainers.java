@@ -157,6 +157,17 @@ public final class DefaultContainers {
                 .showOverlay(false)
                 .craftingSound("patience:sawmill")
                 .build());
+
+        register(ContainerSettings.builder()
+                .screenClass("de.rubixdev.inventorio.client.ui.InventorioScreen")
+                .ingredientSlots(SlotRange.parse("1-4"))
+                .resultSlot(9)
+                .overlayTexture("patience:textures/inventory.png")
+                .overlayX(154)
+                .overlayY(29)
+                .overlayWidth(18)
+                .overlayHeight(15)
+                .build());
     }
 
     public static void register(ContainerSettings settings) {
