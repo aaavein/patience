@@ -103,7 +103,7 @@ public class PatienceConfig {
 
     public static class ScreenShakeSettings {
         @SerializedName("enabled")
-        private boolean enabled = true;
+        private boolean enabled = false;
         @SerializedName("intensity")
         private float intensity = 0.5F;
 
