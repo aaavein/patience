@@ -12,7 +12,7 @@ import java.util.List;
 public final class IngredientCountHelper {
     private static final Logger LOGGER = LogManager.getLogger(IngredientCountHelper.class);
 
-    public static int getRecipeIngredientCount(AbstractContainerMenu menu) {
+    public static int getCustomIngredientCount(AbstractContainerMenu menu) {
         if (menu == null) {
             return 1;
         }
@@ -53,7 +53,7 @@ public final class IngredientCountHelper {
             return Math.max(1, countField.getInt(recipe));
 
         } catch (Exception e) {
-            LOGGER.debug("Failed to get Hexerei woodcutter ingredient count: {}", e.getMessage());
+            LOGGER.debug("Failed to get custom ingredient count: {}", e.getMessage());
             return 1;
         }
     }

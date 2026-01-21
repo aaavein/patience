@@ -7,9 +7,6 @@ import java.util.Arrays;
 
 public class ContainerSettings {
 
-    @SerializedName("name")
-    private String name;
-
     @SerializedName("enabled")
     private boolean enabled;
 
@@ -31,11 +28,11 @@ public class ContainerSettings {
     @SerializedName("ingredient_slots")
     private SlotRange ingredientSlots;
 
-    @SerializedName("ingredient_count_mode")
-    private String ingredientCountMode;
+    @SerializedName("ingredient_mode")
+    private String ingredientMode;
 
     @SerializedName("show_overlay")
-    private boolean showOverlay;
+    private Boolean showOverlay;
 
     @SerializedName("overlay_texture")
     private String overlayTexture;
@@ -44,16 +41,16 @@ public class ContainerSettings {
     private String overlayDirection;
 
     @SerializedName("overlay_x")
-    private int overlayX;
+    private Integer overlayX;
 
     @SerializedName("overlay_y")
-    private int overlayY;
+    private Integer overlayY;
 
     @SerializedName("overlay_width")
-    private int overlayWidth;
+    private Integer overlayWidth;
 
     @SerializedName("overlay_height")
-    private int overlayHeight;
+    private Integer overlayHeight;
 
     @SerializedName("crafting_sound")
     private String craftingSound;
@@ -67,20 +64,19 @@ public class ContainerSettings {
         this.outputSlot = 0;
         this.resultSlot = -1;
         this.ingredientSlots = new SlotRange(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
-        this.ingredientCountMode = "slot";
-        this.showOverlay = true;
-        this.overlayTexture = "patience:textures/generic.png";
-        this.overlayDirection = "right";
-        this.overlayX = 89;
-        this.overlayY = 34;
-        this.overlayWidth = 24;
-        this.overlayHeight = 17;
-        this.craftingSound = "";
-        this.finishSound = "";
+        this.ingredientMode = "slot";
+        this.showOverlay = null;
+        this.overlayTexture = null;
+        this.overlayDirection = null;
+        this.overlayX = null;
+        this.overlayY = null;
+        this.overlayWidth = null;
+        this.overlayHeight = null;
+        this.craftingSound = null;
+        this.finishSound = null;
         this.recipeType = null;
     }
 
-    public String getName() { return name; }
     public boolean isEnabled() { return enabled; }
     public String getScreenClass() { return screenClass; }
     public String getRecipeType() { return recipeType; }
@@ -88,18 +84,44 @@ public class ContainerSettings {
     public int getOutputSlot() { return outputSlot; }
     public int getResultSlot() { return resultSlot; }
     public SlotRange getIngredientSlots() { return ingredientSlots; }
-    public String getIngredientCountMode() { return ingredientCountMode; }
-    public boolean isShowOverlay() { return showOverlay; }
-    public String getOverlayTexture() { return overlayTexture; }
-    public String getOverlayDirection() { return overlayDirection; }
-    public int getOverlayX() { return overlayX; }
-    public int getOverlayY() { return overlayY; }
-    public int getOverlayWidth() { return overlayWidth; }
-    public int getOverlayHeight() { return overlayHeight; }
-    public String getCraftingSound() { return craftingSound; }
-    public String getFinishSound() { return finishSound; }
+    public String getIngredientMode() { return ingredientMode; }
 
-    public void setName(String name) { this.name = name; }
+    public boolean isShowOverlay() {
+        return showOverlay != null ? showOverlay : true;
+    }
+
+    public String getOverlayTexture() {
+        return overlayTexture != null ? overlayTexture : "patience:textures/generic.png";
+    }
+
+    public String getOverlayDirection() {
+        return overlayDirection != null ? overlayDirection : "right";
+    }
+
+    public int getOverlayX() {
+        return overlayX != null ? overlayX : 89;
+    }
+
+    public int getOverlayY() {
+        return overlayY != null ? overlayY : 34;
+    }
+
+    public int getOverlayWidth() {
+        return overlayWidth != null ? overlayWidth : 24;
+    }
+
+    public int getOverlayHeight() {
+        return overlayHeight != null ? overlayHeight : 17;
+    }
+
+    public String getCraftingSound() {
+        return craftingSound != null ? craftingSound : "";
+    }
+
+    public String getFinishSound() {
+        return finishSound != null ? finishSound : "";
+    }
+
     public void setEnabled(boolean enabled) { this.enabled = enabled; }
     public void setScreenClass(String screenClass) { this.screenClass = screenClass; }
     public void setRecipeType(String recipeType) { this.recipeType = recipeType; }
@@ -107,14 +129,14 @@ public class ContainerSettings {
     public void setOutputSlot(int outputSlot) { this.outputSlot = outputSlot; }
     public void setResultSlot(int resultSlot) { this.resultSlot = resultSlot; }
     public void setIngredientSlots(SlotRange ingredientSlots) { this.ingredientSlots = ingredientSlots; }
-    public void setIngredientCountMode(String ingredientCountMode) { this.ingredientCountMode = ingredientCountMode; }
-    public void setShowOverlay(boolean showOverlay) { this.showOverlay = showOverlay; }
+    public void setIngredientMode(String ingredientMode) { this.ingredientMode = ingredientMode; }
+    public void setShowOverlay(Boolean showOverlay) { this.showOverlay = showOverlay; }
     public void setOverlayTexture(String overlayTexture) { this.overlayTexture = overlayTexture; }
     public void setOverlayDirection(String overlayDirection) { this.overlayDirection = overlayDirection; }
-    public void setOverlayX(int overlayX) { this.overlayX = overlayX; }
-    public void setOverlayY(int overlayY) { this.overlayY = overlayY; }
-    public void setOverlayWidth(int overlayWidth) { this.overlayWidth = overlayWidth; }
-    public void setOverlayHeight(int overlayHeight) { this.overlayHeight = overlayHeight; }
+    public void setOverlayX(Integer overlayX) { this.overlayX = overlayX; }
+    public void setOverlayY(Integer overlayY) { this.overlayY = overlayY; }
+    public void setOverlayWidth(Integer overlayWidth) { this.overlayWidth = overlayWidth; }
+    public void setOverlayHeight(Integer overlayHeight) { this.overlayHeight = overlayHeight; }
     public void setCraftingSound(String craftingSound) { this.craftingSound = craftingSound; }
     public void setFinishSound(String finishSound) { this.finishSound = finishSound; }
 
@@ -125,7 +147,6 @@ public class ContainerSettings {
     public static class Builder {
         private final ContainerSettings settings = new ContainerSettings();
 
-        public Builder name(String name) { settings.setName(name); return this; }
         public Builder enabled(boolean enabled) { settings.setEnabled(enabled); return this; }
         public Builder screenClass(String screenClass) { settings.setScreenClass(screenClass); return this; }
         public Builder recipeType(String recipeType) { settings.setRecipeType(recipeType); return this; }
@@ -133,7 +154,7 @@ public class ContainerSettings {
         public Builder outputSlot(int slot) { settings.setOutputSlot(slot); return this; }
         public Builder resultSlot(int slot) { settings.setResultSlot(slot); return this; }
         public Builder ingredientSlots(SlotRange slots) { settings.setIngredientSlots(slots); return this; }
-        public Builder ingredientCountMode(String mode) { settings.setIngredientCountMode(mode); return this; }
+        public Builder ingredientMode(String mode) { settings.setIngredientMode(mode); return this; }
         public Builder showOverlay(boolean show) { settings.setShowOverlay(show); return this; }
         public Builder overlayTexture(String texture) { settings.setOverlayTexture(texture); return this; }
         public Builder overlayDirection(String direction) { settings.setOverlayDirection(direction); return this; }

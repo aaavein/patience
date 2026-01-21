@@ -11,7 +11,6 @@ public final class DefaultContainers {
 
     static {
         register(ContainerSettings.builder()
-                .name("minecraft:inventory")
                 .screenClass("net.minecraft.client.gui.screens.inventory.InventoryScreen")
                 .ingredientSlots(SlotRange.parse("1-4"))
                 .resultSlot(9)
@@ -23,7 +22,6 @@ public final class DefaultContainers {
                 .build());
 
         register(ContainerSettings.builder()
-                .name("minecraft:inventory")
                 .screenClass("top.theillusivec4.curios.client.gui.CuriosScreen")
                 .ingredientSlots(SlotRange.parse("1-4"))
                 .resultSlot(9)
@@ -35,13 +33,11 @@ public final class DefaultContainers {
                 .build());
 
         register(ContainerSettings.builder()
-                .name("minecraft:crafting_table")
                 .screenClass("net.minecraft.client.gui.screens.inventory.CraftingScreen")
                 .resultSlot(10)
                 .build());
 
         register(ContainerSettings.builder()
-                .name("minecraft:smithing_table")
                 .screenClass("net.minecraft.client.gui.screens.inventory.SmithingScreen")
                 .ingredientSlots(SlotRange.parse("0-2"))
                 .outputSlot(3)
@@ -52,7 +48,6 @@ public final class DefaultContainers {
                 .build());
 
         register(ContainerSettings.builder()
-                .name("minecraft:anvil")
                 .screenClass("net.minecraft.client.gui.screens.inventory.AnvilScreen")
                 .ingredientSlots(SlotRange.parse("0-1"))
                 .outputSlot(2)
@@ -63,7 +58,6 @@ public final class DefaultContainers {
                 .build());
 
         register(ContainerSettings.builder()
-                .name("minecraft:grindstone")
                 .screenClass("net.minecraft.client.gui.screens.inventory.GrindstoneScreen")
                 .ingredientSlots(SlotRange.parse("0-1"))
                 .outputSlot(2)
@@ -74,7 +68,6 @@ public final class DefaultContainers {
                 .build());
 
         register(ContainerSettings.builder()
-                .name("minecraft:stonecutter")
                 .screenClass("net.minecraft.client.gui.screens.inventory.StonecutterScreen")
                 .ingredientSlots(SlotRange.parse("0"))
                 .outputSlot(1)
@@ -84,7 +77,6 @@ public final class DefaultContainers {
                 .build());
 
         register(ContainerSettings.builder()
-                .name("minecraft:cartography_table")
                 .screenClass("net.minecraft.client.gui.screens.inventory.CartographyTableScreen")
                 .ingredientSlots(SlotRange.parse("0-1"))
                 .outputSlot(2)
@@ -94,7 +86,6 @@ public final class DefaultContainers {
                 .build());
 
         register(ContainerSettings.builder()
-                .name("minecraft:loom")
                 .screenClass("net.minecraft.client.gui.screens.inventory.LoomScreen")
                 .ingredientSlots(SlotRange.parse("0-2"))
                 .outputSlot(3)
@@ -104,7 +95,6 @@ public final class DefaultContainers {
                 .build());
 
         register(ContainerSettings.builder()
-                .name("sawmill:sawmill")
                 .screenClass("net.mehvahdjukaar.sawmill.SawmillScreen")
                 .ingredientSlots(SlotRange.parse("0"))
                 .outputSlot(1)
@@ -114,7 +104,6 @@ public final class DefaultContainers {
                 .build());
 
         register(ContainerSettings.builder()
-                .name("woodworks:sawmill")
                 .screenClass("com.teamabnormals.woodworks.client.gui.screens.inventory.SawmillScreen")
                 .ingredientSlots(SlotRange.parse("0"))
                 .outputSlot(1)
@@ -124,7 +113,6 @@ public final class DefaultContainers {
                 .build());
 
         register(ContainerSettings.builder()
-                .name("easel_does_it:easel")
                 .screenClass("com.dolthhaven.easeldoesit.common.inventory.EaselScreen")
                 .ingredientSlots(SlotRange.parse("0"))
                 .outputSlot(1)
@@ -134,7 +122,6 @@ public final class DefaultContainers {
                 .build());
 
         register(ContainerSettings.builder()
-                .name("galosphere:combustion_table")
                 .screenClass("net.orcinus.galosphere.client.gui.CombustionTableScreen")
                 .ingredientSlots(SlotRange.parse("0-3"))
                 .outputSlot(4)
@@ -144,7 +131,6 @@ public final class DefaultContainers {
                 .build());
 
         register(ContainerSettings.builder()
-                .name("clayworks:pottery_table")
                 .screenClass("com.teamabnormals.clayworks.client.gui.screens.inventory.PotteryScreen")
                 .ingredientSlots(SlotRange.parse("0-2"))
                 .outputSlot(3)
@@ -154,7 +140,6 @@ public final class DefaultContainers {
                 .build());
 
         register(ContainerSettings.builder()
-                .name("cold_sweat:sewing_table")
                 .screenClass("com.momosoftworks.coldsweat.client.gui.SewingScreen")
                 .ingredientSlots(SlotRange.parse("0-1"))
                 .outputSlot(2)
@@ -164,12 +149,11 @@ public final class DefaultContainers {
                 .build());
 
         register(ContainerSettings.builder()
-                .name("hexerei:woodcutter")
                 .screenClass("net.joefoxe.hexerei.screen.WoodcutterScreen")
                 .ingredientSlots(SlotRange.parse("0"))
                 .outputSlot(1)
                 .resultSlot(2)
-                .ingredientCountMode("recipe")
+                .ingredientMode("custom")
                 .showOverlay(false)
                 .craftingSound("patience:sawmill")
                 .build());

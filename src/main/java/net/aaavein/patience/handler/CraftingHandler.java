@@ -465,14 +465,14 @@ public final class CraftingHandler {
         float globalMult = config.getGlobalTimeMultiplier();
         float containerMult = container.getTimeMultiplier();
 
-        String countMode = container.getIngredientCountMode();
-        if (countMode == null) {
-            countMode = "slot";
+        String mode = container.getIngredientMode();
+        if (mode == null) {
+            mode = "slot";
         }
 
-        int recipeIngredientCount = 1;
-        if ("recipe".equals(countMode)) {
-            recipeIngredientCount = IngredientCountHelper.getRecipeIngredientCount(currentScreen.getMenu());
+        int customIngredientCount = 1;
+        if ("custom".equals(mode)) {
+            customIngredientCount = IngredientCountHelper.getCustomIngredientCount(currentScreen.getMenu());
         }
 
         float ingredientTime = 0.0F;
@@ -492,12 +492,12 @@ public final class CraftingHandler {
 
             float itemContribution = modMult * itemMult * tagMult;
 
-            switch (countMode) {
+            switch (mode) {
                 case "stack":
                     ingredientTime += itemContribution * stack.getCount();
                     break;
-                case "recipe":
-                    ingredientTime += itemContribution * recipeIngredientCount;
+                case "custom":
+                    ingredientTime += itemContribution * customIngredientCount;
                     break;
                 default:
                     ingredientTime += itemContribution;
