@@ -736,7 +736,7 @@ public final class CraftingHandler {
             AnvilMenu menu = (AnvilMenu) currentScreen.getMenu();
             int cost = menu.getCost();
 
-            if (cost <= 0) return false;
+            if (cost <= 0) return true;
             return player.getAbilities().instabuild || player.experienceLevel >= cost;
         }
 
