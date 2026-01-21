@@ -164,7 +164,7 @@ public final class DefaultContainers {
                 .resultSlot(9)
                 .overlayTexture("patience:textures/inventory.png")
                 .overlayX(154)
-                .overlayY(29)
+                .overlayY(28)
                 .overlayWidth(18)
                 .overlayHeight(15)
                 .build());
