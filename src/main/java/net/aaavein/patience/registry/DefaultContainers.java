@@ -162,6 +162,17 @@ public final class DefaultContainers {
                 .showOverlay(false)
                 .craftingSound("patience:sewing_table")
                 .build());
+
+        register(ContainerSettings.builder()
+                .name("hexerei:woodcutter")
+                .screenClass("net.joefoxe.hexerei.screen.WoodcutterScreen")
+                .ingredientSlots(SlotRange.parse("0"))
+                .outputSlot(1)
+                .resultSlot(2)
+                .ingredientCountMode("recipe")
+                .showOverlay(false)
+                .craftingSound("patience:sawmill")
+                .build());
     }
 
     public static void register(ContainerSettings settings) {

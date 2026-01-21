@@ -31,6 +31,9 @@ public class ContainerSettings {
     @SerializedName("ingredient_slots")
     private SlotRange ingredientSlots;
 
+    @SerializedName("ingredient_count_mode")
+    private String ingredientCountMode;
+
     @SerializedName("show_overlay")
     private boolean showOverlay;
 
@@ -64,6 +67,7 @@ public class ContainerSettings {
         this.outputSlot = 0;
         this.resultSlot = -1;
         this.ingredientSlots = new SlotRange(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
+        this.ingredientCountMode = "slot";
         this.showOverlay = true;
         this.overlayTexture = "patience:textures/generic.png";
         this.overlayDirection = "right";
@@ -84,6 +88,7 @@ public class ContainerSettings {
     public int getOutputSlot() { return outputSlot; }
     public int getResultSlot() { return resultSlot; }
     public SlotRange getIngredientSlots() { return ingredientSlots; }
+    public String getIngredientCountMode() { return ingredientCountMode; }
     public boolean isShowOverlay() { return showOverlay; }
     public String getOverlayTexture() { return overlayTexture; }
     public String getOverlayDirection() { return overlayDirection; }
@@ -102,6 +107,7 @@ public class ContainerSettings {
     public void setOutputSlot(int outputSlot) { this.outputSlot = outputSlot; }
     public void setResultSlot(int resultSlot) { this.resultSlot = resultSlot; }
     public void setIngredientSlots(SlotRange ingredientSlots) { this.ingredientSlots = ingredientSlots; }
+    public void setIngredientCountMode(String ingredientCountMode) { this.ingredientCountMode = ingredientCountMode; }
     public void setShowOverlay(boolean showOverlay) { this.showOverlay = showOverlay; }
     public void setOverlayTexture(String overlayTexture) { this.overlayTexture = overlayTexture; }
     public void setOverlayDirection(String overlayDirection) { this.overlayDirection = overlayDirection; }
@@ -127,6 +133,7 @@ public class ContainerSettings {
         public Builder outputSlot(int slot) { settings.setOutputSlot(slot); return this; }
         public Builder resultSlot(int slot) { settings.setResultSlot(slot); return this; }
         public Builder ingredientSlots(SlotRange slots) { settings.setIngredientSlots(slots); return this; }
+        public Builder ingredientCountMode(String mode) { settings.setIngredientCountMode(mode); return this; }
         public Builder showOverlay(boolean show) { settings.setShowOverlay(show); return this; }
         public Builder overlayTexture(String texture) { settings.setOverlayTexture(texture); return this; }
         public Builder overlayDirection(String direction) { settings.setOverlayDirection(direction); return this; }

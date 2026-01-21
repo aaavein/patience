@@ -31,6 +31,7 @@ import net.aaavein.patience.config.PatienceConfig;
 import net.aaavein.patience.config.RecipeSettings;
 import net.aaavein.patience.network.CraftingExhaustionPayload;
 import net.aaavein.patience.registry.AttributeRegistry;
+import net.aaavein.patience.util.IngredientCountHelper;
 import net.aaavein.patience.util.SlotRange;
 import net.aaavein.patience.util.SpeedCalculator;
 
@@ -464,6 +465,16 @@ public final class CraftingHandler {
         float globalMult = config.getGlobalTimeMultiplier();
         float containerMult = container.getTimeMultiplier();
 
+        String countMode = container.getIngredientCountMode();
+        if (countMode == null) {
+            countMode = "slot";
+        }
+
+        int recipeIngredientCount = 1;
+        if ("recipe".equals(countMode)) {
+            recipeIngredientCount = IngredientCountHelper.getRecipeIngredientCount(currentScreen.getMenu());
+        }
+
         float ingredientTime = 0.0F;
         for (int slot : container.getIngredientSlots()) {
             if (isSlotEmpty(slot)) continue;
@@ -479,7 +490,19 @@ public final class CraftingHandler {
             float itemMult = config.getIngredientMultipliers().getByItem().getOrDefault(itemId, 1.0F);
             float tagMult = getTagMultiplier(stack, config.getIngredientMultipliers());
 
-            ingredientTime += modMult * itemMult * tagMult;
+            float itemContribution = modMult * itemMult * tagMult;
+
+            switch (countMode) {
+                case "stack":
+                    ingredientTime += itemContribution * stack.getCount();
+                    break;
+                case "recipe":
+                    ingredientTime += itemContribution * recipeIngredientCount;
+                    break;
+                default:
+                    ingredientTime += itemContribution;
+                    break;
+            }
         }
 
         float outputMult = 1.0F;
